@@ -21,6 +21,10 @@ Se puede generar una versión de _debug_ del DLL que genera un fichero CSV.LOG
 con información de los CSV que se leen. **En cada invocación o ejecución, se
 concatena nuevo contenido al fichero de log.**
 
+```
+make2 csv_dbg.dll
+```
+
 ## Funciones implementadas
 
 `INT readCSVToIntArray(STRING fileName, OFFSET offset, INT numberOfElements)`
