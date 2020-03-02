@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* Tipos de tamaÏo predeterminado */
+/* Tipos de tamaØo predeterminado */
 #if __STDC_VERSION__ >= 199901L
 #include <stdint.h>
 #else
@@ -23,9 +23,20 @@ INIT_LOG();
 #define VALUE_SEPARATOR ";"
 #define VALUE_SEPARATOR_WITH_EOL ";\r\n"
 
+/**
+ * Tama¤o del tipo de dato
+ */
+typedef enum {
+  BYTE,
+  WORD,
+  INT
+} DataSize;
+
 void dropBufferFrom(char *buf,char dropCharacter);
-void tokenizeLine(char *buf, uint_32_t offset, uint_32_t numberOfElements, uint_32_t *index);
-void putValue(const char *token, uint_32_t offset, uint_32_t index);
+void tokenizeLine(DataSize dataSize, char *buf, uint_32_t offset, uint_32_t numberOfElements, uint_32_t *index);
+void putValueInt(const char *token, uint_32_t offset, uint_32_t index);
+void putValueWord(const char *token, uint_32_t offset, uint_32_t index);
+void putValueByte(const char *token, uint_32_t offset, uint_32_t index);
 
 /**
  * Elimina del buf todo el contenido posterior a un caracter si este est?
@@ -37,24 +48,37 @@ void dropBufferFrom(char *buf,char dropCharacter)
 {
   char* position = strchr(buf, dropCharacter);
   if (position != NULL) {
-    // Insertamos un caracter nulo en dicha posici«n para "cortar" la cadena por ahi
+    // Insertamos un caracter nulo en dicha posici®n para "cortar" la cadena por ahi
     *position = 0;
   }
 }
 
 /**
  * Tokeniza el buf usando el separador ';' y procesa cada token
+ * @param dataSize Tama¤o del tipo de dato
  * @param buf Ptr. al buf
  * @param offset Offset del array de Ints de DIV
  * @param numberOfElements N? maximo de elementos del array
  * @param *index Indice del elemento del array a guardar
  */
-void tokenizeLine(char *buf, uint_32_t offset, uint_32_t numberOfElements, uint_32_t *index)
+void tokenizeLine(DataSize dataSize, char *buf, uint_32_t offset, uint_32_t numberOfElements, uint_32_t *index)
 {
   const char* token = strtok(buf, VALUE_SEPARATOR);
   while (*index < numberOfElements && token != NULL && *token != 0) {
     if (offset != 0) {
-      putValue(token, offset, *index);
+      switch (dataSize) {
+        case BYTE:
+          putValueByte(token, offset, *index);
+          break;
+
+        case WORD:
+          putValueWord(token, offset, *index);
+          break;
+
+        case INT:
+        default:
+          putValueInt(token, offset, *index);
+      }
     }
     token = strtok(NULL, VALUE_SEPARATOR_WITH_EOL);
     // El indice lo aumentamos desde aqui para contar solo los tokens validos
@@ -63,27 +87,52 @@ void tokenizeLine(char *buf, uint_32_t offset, uint_32_t numberOfElements, uint_
 }
 
 /**
- * Mete un valor int 32 en la memoria de DIV
+ * Mete un valor int 32bits en la memoria de DIV
  */
-void putValue(const char *token, uint_32_t offset, uint_32_t index)
+void putValueInt(const char *token, uint_32_t offset, uint_32_t index)
 {
   int_32_t val = 0;
+  int_32_t* ptr = &mem[offset];
   if (token != NULL) {
     val = atoi(token);
 
     // mem es un array de int_32_t con toda la memoria del programa DIV
     // si DIV2 esta compactando cuando el tipo del array es byte o word, entonces
     // habra que hacer magia con punteros
-    mem[offset + index] = val;
+    ptr[index] = val;
   }
 }
 
+/**
+ * Mete un valor word 16bit en la memoria de DIV
+ */
+void putValueWord(const char *token, uint_32_t offset, uint_32_t index)
+{
+  int_16_t val = 0;
+  int_16_t* ptr = (int_16_t*) &mem[offset];
+  if (token != NULL) {
+    val = atoi(token);
+    ptr[index] = val;
+  }
+}
+
+/**
+ * Mete un valor byte en la memoria de DIV
+ */
+void putValueByte(const char *token, uint_32_t offset, uint_32_t index)
+{
+  int_8_t val = 0;
+  int_8_t* ptr = (int_8_t*) &mem[offset];
+  if (token != NULL) {
+    val = atoi(token);
+    ptr[index] = val;
+  }
+}
 // Importante: Para cada funci¢n se debe indicar el retval(int), y hacer
-// siempre un getparm() por cada par metro de llamada (el retval() es
+// siempre un getparm() por cada par metro de llamada (el retval() es
 // imprescindible incluso si la funci¢n no necesita devolver un valor).
 
-// Funci¢n DIV readCSVToArray(fileName ,offset array, numberOfElements)
-void readCSVToIntArray() {
+inline void readCSVToArray(DataSize dataSize) {
   char* fileName = NULL;
   FILE *file = NULL;
   char buf[BUFFER_SIZE];
@@ -92,7 +141,7 @@ void readCSVToIntArray() {
 
   OPEN_LOG();
 
-  // Los parÿmetros se leen en el orden inverso en que se declaran, al
+  // Los par metros se leen en el orden inverso en que se declaran, al
   // provenir del stack del interprete de DIV
   int numberOfElements = getparm();
   int offset = getparm();
@@ -115,7 +164,7 @@ void readCSVToIntArray() {
       dropBufferFrom(buf, '\n'); // Purgar fin de linea CRLF o LF
       dropBufferFrom(buf, '#'); // Comentarios
       LPRINTF("CSV: buf=%s\n", buf);
-      tokenizeLine(buf, offset, numberOfElements, &index);
+      tokenizeLine(dataSize, buf, offset, numberOfElements, &index);
     }
     div_fclose(file);
   } else {
@@ -130,9 +179,26 @@ void readCSVToIntArray() {
   retval(index);
 }
 
+// Funci¢n DIV readCSVToIntArray(fileName ,offset array, numberOfElements)
+void readCSVToIntArray() {
+  readCSVToArray(INT);
+}
+
+// Funci¢n DIV readCSVToWordArray(fileName ,offset array, numberOfElements)
+void readCSVToWordArray() {
+  readCSVToArray(WORD);
+}
+
+// Funci¢n DIV readCSVToByteArray(fileName ,offset array, numberOfElements)
+void readCSVToByteArray() {
+  readCSVToArray(BYTE);
+}
+
 void __export divlibrary(LIBRARY_PARAMS) {
-  //          Nombre en DIV,      ptr a funci½n,     nõ de parÿmetros
+  //          Nombre en DIV,      ptr a funci¢n,     n§ de par metros
   COM_export("readCSVToIntArray", readCSVToIntArray, 3);
+  COM_export("readCSVToWordArray", readCSVToWordArray, 3);
+  COM_export("readCSVToByteArray", readCSVToByteArray, 3);
 }
 
 void __export divmain(COMMON_PARAMS) {

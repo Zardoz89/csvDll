@@ -36,6 +36,24 @@ función es la cantidad de elementos leídos o -1 en caso de error.
 Si offset es 0, entonces no guardará ningún valor en ningún sitio, limitandose
 a devolver la cantidad de elementos que hay en el fichero CSV.
 
+`INT readCSVToWordArray(STRING fileName, OFFSET offset, INT numberOfElements)`
+
+Lee un fichero CSV en la ruta dada por la cadena *fileName*, y guarda los
+valores en el array de Words apuntado por el offset. Leerá una cantidad
+máxima de elementos dados por numberOfElements. El valor retornado por la
+función es la cantidad de elementos leídos o -1 en caso de error.
+Si offset es 0, entonces no guardará ningún valor en ningún sitio, limitandose
+a devolver la cantidad de elementos que hay en el fichero CSV.
+
+`INT readCSVToByteArray(STRING fileName, OFFSET offset, INT numberOfElements)`
+
+Lee un fichero CSV en la ruta dada por la cadena *fileName*, y guarda los
+valores en el array de Bytes apuntado por el offset. Leerá una cantidad
+máxima de elementos dados por numberOfElements. El valor retornado por la
+función es la cantidad de elementos leídos o -1 en caso de error.
+Si offset es 0, entonces no guardará ningún valor en ningún sitio, limitandose
+a devolver la cantidad de elementos que hay en el fichero CSV.
+
 ## Ejemplo de uso
 
 Uso típico:
