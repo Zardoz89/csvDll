@@ -20,8 +20,7 @@
 INIT_LOG();
 
 #define BUFFER_SIZE 256
-#define VALUE_SEPARATOR ";"
-#define VALUE_SEPARATOR_WITH_EOL ";\r\n"
+#define EOL "\r\n"
 
 /**
  * Tama¤o del tipo de dato
@@ -31,6 +30,11 @@ typedef enum {
   WORD,
   INT
 } DataSize;
+
+
+uint_8_t isValueSeparatorWithEOLFilled = 0; // Flag para saber si ya hemos rellenado valueSeparatorWithEOL
+char* valueSeparator = ",";
+char valueSeparatorWithEOL[BUFFER_SIZE]; // El elemento separador concatenado con EOL
 
 void dropBufferFrom(char *buf,char dropCharacter);
 void tokenizeLine(DataSize dataSize, char *buf, uint_32_t offset, uint_32_t numberOfElements, uint_32_t *index);
@@ -63,7 +67,7 @@ void dropBufferFrom(char *buf,char dropCharacter)
  */
 void tokenizeLine(DataSize dataSize, char *buf, uint_32_t offset, uint_32_t numberOfElements, uint_32_t *index)
 {
-  const char* token = strtok(buf, VALUE_SEPARATOR);
+  const char* token = strtok(buf, valueSeparator);
   while (*index < numberOfElements && token != NULL && *token != 0) {
     if (offset != 0) {
       switch (dataSize) {
@@ -80,7 +84,7 @@ void tokenizeLine(DataSize dataSize, char *buf, uint_32_t offset, uint_32_t numb
           putValueInt(token, offset, *index);
       }
     }
-    token = strtok(NULL, VALUE_SEPARATOR_WITH_EOL);
+    token = strtok(NULL, valueSeparatorWithEOL);
     // El indice lo aumentamos desde aqui para contar solo los tokens validos
     *index = *index + 1;
   }
@@ -139,6 +143,12 @@ inline void readCSVToArray(DataSize dataSize) {
   int error = 0;
   uint_32_t index = 0;
 
+  // Rellenamos valueSeparatorWithEOL de forma lazy
+  if (!isValueSeparatorWithEOLFilled) {
+    sprintf(valueSeparatorWithEOL, "%s%s", valueSeparator, EOL);
+    isValueSeparatorWithEOLFilled = 1;
+  }
+
   OPEN_LOG();
 
   // Los par metros se leen en el orden inverso en que se declaran, al
@@ -179,19 +189,37 @@ inline void readCSVToArray(DataSize dataSize) {
   retval(index);
 }
 
-// Funci¢n DIV readCSVToIntArray(fileName ,offset array, numberOfElements)
+// Funci¢n DIV readCSVToIntArray(string fileName ,offset array, numberOfElements)
 void readCSVToIntArray() {
   readCSVToArray(INT);
 }
 
-// Funci¢n DIV readCSVToWordArray(fileName ,offset array, numberOfElements)
+// Funci¢n DIV readCSVToWordArray(string fileName ,offset array, numberOfElements)
 void readCSVToWordArray() {
   readCSVToArray(WORD);
 }
 
-// Funci¢n DIV readCSVToByteArray(fileName ,offset array, numberOfElements)
+// Funci¢n DIV readCSVToByteArray(string fileName ,offset array, numberOfElements)
 void readCSVToByteArray() {
   readCSVToArray(BYTE);
+}
+
+// Funci¢n DIV setCSVSeparator(string separator)
+void setCSVSeparator() {
+  int offsetSeparator = getparm();
+  char* divString = (char *)&mem[text_offset + offsetSeparator];
+  size_t stringLenght = strlen(divString);
+
+  if (stringLenght <= 0) {
+    retval(-1); // No se ha pasado una cadena valida
+    return;
+  }
+
+  valueSeparator = divString;
+  sprintf(valueSeparatorWithEOL, "%s%s", valueSeparator, EOL);
+  isValueSeparatorWithEOLFilled = 1;
+
+  retval(0);
 }
 
 void __export divlibrary(LIBRARY_PARAMS) {
@@ -199,6 +227,7 @@ void __export divlibrary(LIBRARY_PARAMS) {
   COM_export("readCSVToIntArray", readCSVToIntArray, 3);
   COM_export("readCSVToWordArray", readCSVToWordArray, 3);
   COM_export("readCSVToByteArray", readCSVToByteArray, 3);
+  COM_export("setCSVSeparator", setCSVSeparator, 1);
 }
 
 void __export divmain(COMMON_PARAMS) {

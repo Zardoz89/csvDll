@@ -2,9 +2,12 @@ DLL para lectura de ficheros CSV simples
 ----------------------------------------
 
 Esta DLL implementa funciones para parsear ficheros CSV, donde se utiliza el
-carácter ';' como elemento separador, y solo contienen valores numéricos. El
+carácter ',' como elemento separador, y solo contienen valores numéricos. El
 carácter '#' marca que el resto de la linea se ignore, siendo útil para agregar
-comentarios en los ficheros.
+comentarios y cabeceras en los ficheros.
+
+Todos los buffers internos son de 256 bytes, con lo puede que no pueda procesar
+correctamente lineas mas largas de 255 bytes;
 
 ## Como compilar
 
@@ -26,6 +29,12 @@ make2 csv_dbg.dll
 ```
 
 ## Funciones implementadas
+
+`INT setCSVSeparator(STRING separator)`
+
+Cambia el elemento separador al indicado en la cadena. Está cadena se pasa a
+strtok.
+
 
 `INT readCSVToIntArray(STRING fileName, OFFSET offset, INT numberOfElements)`
 
