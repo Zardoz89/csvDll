@@ -1,6 +1,8 @@
 DLL para lectura de ficheros CSV simples
 ----------------------------------------
 
+v0.3.0
+
 Esta DLL implementa funciones para parsear ficheros CSV, donde se utiliza el
 carácter ',' como elemento separador, y solo contienen valores numéricos. El
 carácter '#' marca que el resto de la linea se ignore, siendo útil para agregar
