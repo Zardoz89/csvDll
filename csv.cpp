@@ -13,9 +13,7 @@
 #endif
 
 #include "csv.h"
-
-#define GLOBALS
-#include "div.h"
+#include "divAux.h"
 
 INIT_LOG();
 
@@ -158,7 +156,7 @@ inline void readCSVToArray(DataSize dataSize) {
   int offsetFileName = getparm();
 
   // Obtenermos el texto en el array, a partir del bloque de textos + el offset que nos pasa DIV
-  fileName = (char *)&mem[text_offset + offsetFileName];
+  fileName = getDivString(offsetFileName);
 
   LPRINTF("CSV: nElem = %d\n", numberOfElements);
   LPRINTF("CSV: offset = %d\n", offset);
@@ -207,7 +205,7 @@ void readCSVToByteArray() {
 // Funci¢n DIV setCSVSeparator(string separator)
 void setCSVSeparator() {
   int offsetSeparator = getparm();
-  char* divString = (char *)&mem[text_offset + offsetSeparator];
+  char* divString = getDivString(offsetSeparator);
   size_t stringLenght = strlen(divString);
 
   if (stringLenght <= 0) {
