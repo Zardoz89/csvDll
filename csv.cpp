@@ -98,7 +98,7 @@ void putValueInt(const char *token, uint_32_t offset, uint_32_t index)
   int_32_t val = 0;
   int_32_t* ptr = &mem[offset];
   if (token != NULL) {
-    val = atoi(token);
+    val = (int_32_t) strtol(token, NULL, 0);
 
     // mem es un array de int_32_t con toda la memoria del programa DIV
     // si DIV2 esta compactando cuando el tipo del array es byte o word, entonces
@@ -115,7 +115,7 @@ void putValueWord(const char *token, uint_32_t offset, uint_32_t index)
   int_16_t val = 0;
   int_16_t* ptr = (int_16_t*) &mem[offset];
   if (token != NULL) {
-    val = atoi(token);
+    val = (int_16_t) strtol(token, NULL, 0);
     ptr[index] = val;
   }
 }
@@ -128,7 +128,7 @@ void putValueByte(const char *token, uint_32_t offset, uint_32_t index)
   int_8_t val = 0;
   int_8_t* ptr = (int_8_t*) &mem[offset];
   if (token != NULL) {
-    val = atoi(token);
+    val = (int_8_t) strtol(token, NULL, 0);
     ptr[index] = val;
   }
 }
