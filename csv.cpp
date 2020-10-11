@@ -189,40 +189,39 @@ inline void readCSVToArray(DataSize dataSize) {
   retval(index);
 }
 
-// Funci¢n DIV readCSVToIntArray(string fileName ,offset array, numberOfElements)
-void readCSVToIntArray() {
-  readCSVToArray(INT);
-}
-
-// Funci¢n DIV readCSVToWordArray(string fileName ,offset array, numberOfElements)
-void readCSVToWordArray() {
-  readCSVToArray(WORD);
-}
-
-// Funci¢n DIV readCSVToByteArray(string fileName ,offset array, numberOfElements)
-void readCSVToByteArray() {
-  readCSVToArray(BYTE);
-}
-
-// Funci¢n DIV setCSVSeparator(string separator)
-void setCSVSeparator() {
-  int offsetSeparator = getparm();
-  char* divString = (char *)&mem[text_offset + offsetSeparator];
-  size_t stringLenght = strlen(divString);
-
-  if (stringLenght <= 0) {
-    retval(-1); // No se ha pasado una cadena valida
-    return;
+extern "C" {
+  // Funci¢n DIV readCSVToIntArray(string fileName ,offset array, numberOfElements)
+  void readCSVToIntArray() {
+    readCSVToArray(INT);
   }
 
-  valueSeparator = divString;
-  sprintf(valueSeparatorWithEOL, "%s%s", valueSeparator, EOL);
-  isValueSeparatorWithEOLFilled = 1;
+  // Funci¢n DIV readCSVToWordArray(string fileName ,offset array, numberOfElements)
+  void readCSVToWordArray() {
+    readCSVToArray(WORD);
+  }
 
-  retval(0);
-}
+  // Funci¢n DIV readCSVToByteArray(string fileName ,offset array, numberOfElements)
+  void readCSVToByteArray() {
+    readCSVToArray(BYTE);
+  }
 
-extern "C" {
+  // Funci¢n DIV setCSVSeparator(string separator)
+  void setCSVSeparator() {
+    int offsetSeparator = getparm();
+    char* divString = (char *)&mem[text_offset + offsetSeparator];
+    size_t stringLenght = strlen(divString);
+
+    if (stringLenght <= 0) {
+      retval(-1); // No se ha pasado una cadena valida
+      return;
+    }
+
+    valueSeparator = divString;
+    sprintf(valueSeparatorWithEOL, "%s%s", valueSeparator, EOL);
+    isValueSeparatorWithEOLFilled = 1;
+
+    retval(0);
+  }
 
   void __export divlibrary(LIBRARY_PARAMS) {
     //          Nombre en DIV,      ptr a funci¢n,     n§ de par metros
