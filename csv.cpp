@@ -222,15 +222,18 @@ void setCSVSeparator() {
   retval(0);
 }
 
-void __export divlibrary(LIBRARY_PARAMS) {
-  //          Nombre en DIV,      ptr a funci¢n,     n§ de par metros
-  COM_export("readCSVToIntArray", readCSVToIntArray, 3);
-  COM_export("readCSVToWordArray", readCSVToWordArray, 3);
-  COM_export("readCSVToByteArray", readCSVToByteArray, 3);
-  COM_export("setCSVSeparator", setCSVSeparator, 1);
-}
+extern "C" {
 
-void __export divmain(COMMON_PARAMS) {
-  GLOBAL_IMPORT();
+  void __export divlibrary(LIBRARY_PARAMS) {
+    //          Nombre en DIV,      ptr a funci¢n,     n§ de par metros
+    COM_export("readCSVToIntArray", readCSVToIntArray, 3);
+    COM_export("readCSVToWordArray", readCSVToWordArray, 3);
+    COM_export("readCSVToByteArray", readCSVToByteArray, 3);
+    COM_export("setCSVSeparator", setCSVSeparator, 1);
+  }
+
+  void __export divmain(COMMON_PARAMS) {
+    GLOBAL_IMPORT();
+  }
 }
 /* vim: set ts=2 sw=2 tw=0 et fileencoding=cp858 :*/

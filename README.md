@@ -90,7 +90,7 @@ private
   int _retVal = 0;
   string _msg;
 begin
-  _path = pathResolve(_path);
+  _path = pathResolve(dataFile);
   _retVal = readCSVToIntArray(_path, _offset, size);
   if (_retVal <= 0)
     _msg = "Error al abrir fichero de datos: " + _path;
@@ -129,8 +129,8 @@ private
   string _msg;
   int pointer _data;
 begin
-  _path = pathResolve(_path);
-  _nElements = readCSVToIntArray(_path, 0, int_max);
+  _path = pathResolve(dataFile);
+  _nElements = readCSVToIntArray(_path, 0, max_int);
   if (_nElements <= 0)
     _msg = "Error al abrir fichero de datos: " + _path;
     write(0, 0, 0, 0, _msg);
