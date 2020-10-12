@@ -1,3 +1,8 @@
+v0.3.1
+ * Se agrega al repositorio, un directorio `dist` con los compilados generados
+ * Se pasa a soportar DIV DX.
+ * Se usa `extern "C"` para poder compilar una libreria dinamica para DIV DX
+
 v0.3.0
 
  * Se cambia al carácter `,` como elemento separador.

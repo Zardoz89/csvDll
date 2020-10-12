@@ -1,2 +1,2 @@
 #!/bin/bash
-gcc $1 -o $2 -fPIC -funsigned-char -fpermissive -w -shared -O1
+gcc csv.cpp -o csv.so -Iinclude/divdx/ -fPIC -funsigned-char -fpermissive -w -shared -O1

@@ -1,7 +1,7 @@
 DLL para lectura de ficheros CSV simples
 ----------------------------------------
 
-v0.3.0
+v0.3.1
 
 Esta DLL implementa funciones para parsear ficheros CSV, donde se utiliza el
 carácter ',' como elemento separador, y solo contienen valores numéricos. El
@@ -14,59 +14,66 @@ precedido de un 0, entonces se interpretará en base octal.
 Todos los buffers internos son de 256 bytes, con lo puede que no pueda procesar
 correctamente lineas mas largas de 255 bytes;
 
-## Como compilar
+## How build
 
-Se requiere Watcom C 10.6 instalado en un entorno DOS (dosbox, dosemu, maquina virtual
-o instalación nativa de MS-DOS/PC-DOS/DR-DOS, FreeDOS o OpenDOS).
+### Original DIV 2 for MS-DOS
 
-Para compilar, usar el make2.bat como si fuese el comando make :
+Requires Watcom C 10.6 installed on a DOS enviroment (dosbox, dosemu, virtual
+machine or native install of MS-DOS/PC-DOS/DR-DOS, FreeDOs or OpenDOS).
+
+To compile, simply launch make2.bat like if it was make coommand :
 
 ```
 make2 all
 ```
 
-Se puede generar una versión de _debug_ del DLL que genera un fichero CSV.LOG
-con información de los CSV que se leen. **En cada invocación o ejecución, se
-concatena nuevo contenido al fichero de log.**
+A *debug* version could be generated. The debug version generates a CSV.LOG
+file with information about the data being readed by the DLL. On every
+invocation or execution, new content its append at the end of the log file.
 
 ```
 make2 csv_dbg.dll
 ```
 
-## Funciones implementadas
+### DIV DX
+
+Actually only works with @CicTek fork on Linux (64 bit). Simple launch
+`./makeDll.sh` and it will generate a `csv.so` that could be used on DIV DX.
+
+## Functions list
 
 `INT setCSVSeparator(STRING separator)`
 
-Cambia el elemento separador al indicado en la cadena. Está cadena se pasa a
-strtok.
+Sets the seperator token. The string it's used by C's strok function.
 
 
 `INT readCSVToIntArray(STRING fileName, OFFSET offset, INT numberOfElements)`
 
-Lee un fichero CSV en la ruta dada por la cadena *fileName*, y guarda los
-valores en el array u estructura apuntadas por el offset. Leerá una cantidad
-máxima de elementos dados por numberOfElements. El valor retornado por la
-función es la cantidad de elementos leídos o -1 en caso de error.
-Si offset es 0, entonces no guardará ningún valor en ningún sitio, limitandose
-a devolver la cantidad de elementos que hay en el fichero CSV.
+Reads a CSV file on the path stored on the string *fileName*, and stores the
+values in an integer array or struct pointed by *offset*. The max number of elements
+read will be determinated by *numberOfElements*. The return value by the
+function, it's the number of elements read or -1 if there was an error.
+If *offset* is 0, then will not store any read element. It only will return the
+number of elements that are on the CSV file.
 
 `INT readCSVToWordArray(STRING fileName, OFFSET offset, INT numberOfElements)`
 
-Lee un fichero CSV en la ruta dada por la cadena *fileName*, y guarda los
-valores en el array de Words apuntado por el offset. Leerá una cantidad
-máxima de elementos dados por numberOfElements. El valor retornado por la
-función es la cantidad de elementos leídos o -1 en caso de error.
-Si offset es 0, entonces no guardará ningún valor en ningún sitio, limitandose
-a devolver la cantidad de elementos que hay en el fichero CSV.
+Reads a CSV file on the path stored on the string *fileName*, and stores the
+values in an word array pointed by *offset*. The max number of elements
+read will be determinated by *numberOfElements*. The return value by the
+function, it's the number of elements read or -1 if there was an error.
+If *offset* is 0, then will not store any read element. It only will return the
+number of elements that are on the CSV file.
 
 `INT readCSVToByteArray(STRING fileName, OFFSET offset, INT numberOfElements)`
 
-Lee un fichero CSV en la ruta dada por la cadena *fileName*, y guarda los
-valores en el array de Bytes apuntado por el offset. Leerá una cantidad
-máxima de elementos dados por numberOfElements. El valor retornado por la
-función es la cantidad de elementos leídos o -1 en caso de error.
-Si offset es 0, entonces no guardará ningún valor en ningún sitio, limitandose
-a devolver la cantidad de elementos que hay en el fichero CSV.
+Reads a CSV file on the path stored on the string *fileName*, and stores the
+values in an byte array pointed by *offset*. The max number of elements
+read will be determinated by *numberOfElements*. The return value by the
+function, it's the number of elements read or -1 if there was an error.
+If *offset* is 0, then will not store any read element. It only will return the
+number of elements that are on the CSV file.
+
 
 ## Ejemplo de uso
 
