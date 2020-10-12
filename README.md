@@ -37,7 +37,7 @@ make2 csv_dbg.dll
 
 ### DIV DX
 
-Actually only works with [CicTec's fork](https://github.com/CicTec/DIV-Games-Studio) fork on Linux (64 bit). Simple launch
+Actually only works with [CicTec's fork](https://github.com/CicTec/DIV-Games-Studio) on Linux (64 bit). Simple launch
 `./makeDll.sh` and it will generate a `csv.so` that could be used on DIV DX.
 
 ## Functions list
