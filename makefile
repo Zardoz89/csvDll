@@ -1,11 +1,10 @@
 all: csv.dll .SYMBOLIC
 
 csv_dbg.dll: csv.cpp csv.h myint.h div.h .SYMBOLIC
-	wcl386 csv.cpp -ox -zp4 -5 -s -dCSV_DEBUG=1 -l=div_dll -i include/div2/
+	wcl386 csv.cpp -ox -zp4 -5 -s -dCSV_DEBUG=1 -l=div_dll -i=include/div2/
 
 csv.dll: csv.cpp csv.h myint.h div.h
-#	wcl386 csv.cpp -ox -s -l=div_dll
-	wcl386 csv.cpp -ox -zp4 -5 -s -l=div_dll -i include/div2/
+	wcl386 csv.cpp -ox -zp4 -5 -s -l=div_dll -i=include/div2/
 
 .SILENT
 clean: .SYMBOLIC
