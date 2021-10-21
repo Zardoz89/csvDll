@@ -46,7 +46,7 @@ begin
     _msg = "Error reading data file: " + _path;
     write(0, 0, 0, 0, _msg);
     loop
-      // abortamos ejecución
+      // abort execution
       if (key(_q) || key(_esc))
         let_me_alone();
         break;
@@ -76,7 +76,7 @@ begin
     _msg = "Error al abrir fichero de datos: " + _path;
     write(0, 0, 0, 0, _msg);
     loop
-      // abortamos ejecución
+      // abort execution
       if (key(_q) || key(_esc))
         let_me_alone();
         break;
@@ -90,3 +90,4 @@ begin
   return(_data);
 end
 
+/* vim: set ts=2 sw=2 tw=0 et fileencoding=cp850 :*/
