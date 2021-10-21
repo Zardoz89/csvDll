@@ -1,18 +1,30 @@
-all: csv.dll .SYMBOLIC
+# Simple makefile to compile a Gemix module on linux
 
-csv_dbg.dll: csv.cpp csv.h myint.h div.h .SYMBOLIC
-	wcl386 csv.cpp -ox -zp4 -5 -s -dCSV_DEBUG=1 -l=div_dll -i=include/div2/
+.PHONY: all clean 32 64
 
-csv.dll: csv.cpp csv.h myint.h div.h
-	wcl386 csv.cpp -ox -zp4 -5 -s -l=div_dll -i=include/div2/
+CC = gcc
+CFLAGS ?= -fPIC -fpermissive #-funsigned-char -w -O1
+LDFLAGS ?= -shared
+INCLUDE = -Iinclude
+DEFS = -DCSV_DEBUG
 
-.SILENT
-clean: .SYMBOLIC
-	-del *.err
-	-del *.dll
-	-del *.obj
+C32  = -m32 -DGMX_BUILD_32BIT
+C64  = -m32 -DGMX_BUILD_32BIT
 
-install: csv.dll .SYMBOLIC
-	copy csv.dll c:\div2\
+all: dist/x86/GMXEXT_mod_csv.so dist/x64/GMXEXT_mod_csv.so
 
-#  vim: set ts=4 sw=4 tw=0 noet fileencoding=cp858 :
+32: dist/x86/GMXEXT_mod_csv.so
+
+64: dist/x64/GMXEXT_mod_csv.so
+
+dist/x86/GMXEXT_mod_csv.so: src/csv.cpp
+	mkdir -p dist/x86
+	$(CC) ${C32} ${CFLAGS} ${INCLUDE} ${LDFLAGS} ${DEFS} $^ -o $@
+
+dist/x64/GMXEXT_mod_csv.so: src/csv.cpp
+	mkdir -p dist/x64
+	$(CC) ${C64} ${CFLAGS} ${INCLUDE} ${LDFLAGS} ${DEFS} $^ -o $@
+
+clean:
+	rm -rf dist/*
+

@@ -2,7 +2,7 @@
 program example_csv;
 
 // copy the propiated csv.so or csv.dll to this folder and modify the import
-import "csv.so";
+//import "csv.so";
 
 private
 int data[20];
@@ -41,7 +41,7 @@ private
   string _msg;
 begin
   _path = pathResolve(dataFile);
-  _retVal = readCSVToIntArray(_path, _offset, size);
+  _retVal = CSV_readToIntArray(_path, _offset, size);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
     write(0, 0, 0, 0, _msg);
@@ -71,7 +71,7 @@ private
   int pointer _data;
 begin
   _path = pathResolve(dataFile);
-  _nElements = readCSVToIntArray(_path, 0, max_int);
+  _nElements = CSV_readToIntArray(_path, 0, max_int);
   if (_nElements <= 0)
     _msg = "Error al abrir fichero de datos: " + _path;
     write(0, 0, 0, 0, _msg);
@@ -86,8 +86,8 @@ begin
     end
   end
   _data = malloc(_nElements);
-  readCSVToIntArray(_path, _data, _nElements);
+  CSV_readToIntArray(_path, _data, _nElements);
   return(_data);
 end
 
-/* vim: set ts=2 sw=2 tw=0 et fileencoding=cp850 :*/
+/* vim: set ts=2 sw=2 tw=0 et fileencoding=iso8859-1 :*/

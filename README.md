@@ -1,7 +1,9 @@
-DLL para lectura de ficheros CSV simples
+Modulo Gemix para lectura de ficheros CSV simples
 ----------------------------------------
 
-v0.3.1
+v0.4.0
+
+Versión portada/re.-escrita para Gemix v8
 
 Esta DLL implementa funciones para parsear ficheros CSV, donde se utiliza el
 carácter ',' como elemento separador, y solo contienen valores numéricos. El
@@ -16,29 +18,8 @@ correctamente lineas mas largas de 255 bytes;
 
 ## How build
 
-### Original DIV 2 for MS-DOS
-
-Requires Watcom C 10.6 installed on a DOS enviroment (dosbox, dosemu, virtual
-machine or native install of MS-DOS/PC-DOS/DR-DOS, FreeDOs or OpenDOS).
-
-To compile, simply launch make2.bat like if it was make coommand :
-
-```
-make2 all
-```
-
-A *debug* version could be generated. The debug version generates a CSV.LOG
-file with information about the data being readed by the DLL. On every
-invocation or execution, new content its append at the end of the log file.
-
-```
-make2 csv_dbg.dll
-```
-
-### DIV DX
-
-Actually only works with [CicTec's fork](https://github.com/CicTec/DIV-Games-Studio) on Linux (64 bit). Simple launch
-`./makeDll.sh` and it will generate a `csv.so` that could be used on DIV DX.
+Simply run `make` and will build 32bit and 64bit versions of the module using
+gcc.
 
 ## Functions list
 

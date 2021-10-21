@@ -1,3 +1,6 @@
+v0.4.0
+ * Portado/Re-escrito como modulo para Gemix
+
 v0.3.1
  * Se agrega al repositorio, un directorio `dist` con los compilados generados
  * Se pasa a soportar DIV DX.
