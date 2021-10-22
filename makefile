@@ -17,11 +17,11 @@ all: dist/x86/GMXEXT_mod_csv.so dist/x64/GMXEXT_mod_csv.so
 
 64: dist/x64/GMXEXT_mod_csv.so
 
-dist/x86/GMXEXT_mod_csv.so: src/csv.cpp
+dist/x86/GMXEXT_mod_csv.so: src/csv.cpp src/csv_funcs.cpp
 	mkdir -p dist/x86
 	$(CC) ${C32} ${CFLAGS} ${INCLUDE} ${LDFLAGS} ${DEFS} $^ -o $@
 
-dist/x64/GMXEXT_mod_csv.so: src/csv.cpp
+dist/x64/GMXEXT_mod_csv.so: src/csv.cpp src/csv_funcs.cpp
 	mkdir -p dist/x64
 	$(CC) ${C64} ${CFLAGS} ${INCLUDE} ${LDFLAGS} ${DEFS} $^ -o $@
 

@@ -1,12 +1,20 @@
 /*****************************************************************************/
-/**                 Lector de ficheros CSV para DIV2                        **/
-/**                                                                         **/
-/**              Macros para la generación del log de CSV                   **/
+/**                 Lector de ficheros CSV para GEMIX                       **/
 /*****************************************************************************/
 
 #ifndef __CSV_H_
 #define __CSV_H_
 
+#define GMXUSE_GRAPHICSENGINE_HARDWARE 0
+#include "GemixSDK.h"
+
+#include "csv_funcs.h"
+
+#define BUFFER_SIZE 256
+#define EOL "\r\n"
+
+
+// Macros para la generación del log de CSV
 #ifdef CSV_DEBUG
 
 #define CSV_LOG_FILE "csv.log"

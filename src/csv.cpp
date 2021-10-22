@@ -1,21 +1,10 @@
 /*****************************************************************************/
 /**                 Lector de ficheros CSV para GEMIX                       **/
 /*****************************************************************************/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
-
-#define GMXUSE_GRAPHICSENGINE_HARDWARE 0
-
-#include "GemixSDK.h"
 
 #include "csv.h"
 
-INIT_LOG();
-
-#define BUFFER_SIZE 256
-#define EOL "\r\n"
+//INIT_LOG();
 
 /**
  * Tamaño del tipo de dato
@@ -127,25 +116,6 @@ void putValueByte(const char *token, uint_32_t offset, uint_32_t index)
   }
 }
 */
-
-GMXvoid GMXEXT_CSV_readToIntArray() {
-  GMXuint8* fileName = GMXAPI_ParamGetString();
-  GMXint* offset = GMXAPI_ParamGetIntPtr();
-  GMXint numberOfElements = GMXAPI_ParamGetInt();
-
-  //LPRINTF("CSV: nElem = %d\n", numberOfElements);
-  //LPRINTF("CSV: offset = %d\n", (int)offset);
-  //LPRINTF("CSV: fileName = %s\n", fileName);
-
-  char buf[BUFFER_SIZE];
-  memset(buf, 0, BUFFER_SIZE * sizeof(char));
-
-  //GMXFile* gmxFile = GMXAPI_System_FileOpen(fileName, GMXAPI_OPEN_READ, GMXAPI_OPENMODE_TEXT, nullptr);
-	//GMXFile file =*(*OpenFile            )(const GMXchar *file, GMXint mode, GMXint openmode, const GMXchar *password);
-
-  //GMXAPI_System_FileClose(gmxFile);
-  GMXAPI_ReturnInt(0);
-}
 
 GMXDEFINE_LIBRARY_PROPERTIES(GMXEXT_mod_csv,
     /* CATEGORY */
