@@ -2,35 +2,35 @@
 /**                      Funciones visibles por Gemix                       **/
 /*****************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
 
 #include "csv.h"
 
-// csv_readToIntArray(S, IP, I) , "I"
-GMXvoid GMXEXT_CSV_readToIntArray() {
-  GMXint numberOfElements = GMXAPI_ParamGetInt();
-  GMXint* arrayPtr = GMXAPI_ParamGetIntPtr();
+// csv_readToInt32Array(S, I32P, I) , "I"
+GMXvoid GMXEXT_CSV_readToInt32Array() {
+  GMXint maxSize = GMXAPI_ParamGetInt32();
+  maxSize *= GMXAPI_System_GetSizeOfBase(); // Adapta el valor de maxSize en función si SIZEOF es cstyle o div style
+  maxSize = maxSize > 0 ? maxSize -1 : 0;
+
+  GMXint32* arrayPtr = GMXAPI_ParamGetInt32Ptr();
   GMXuint8* fileName = GMXAPI_ParamGetString();
 
-  fprintf(stderr, "CSV: fileName = %s\n", fileName);
-  fprintf(stderr, "CSV: nElem = %d\n", numberOfElements);
-  fprintf(stderr, "CSV: offset = %p\n", arrayPtr);
-
-  //LPRINTF("CSV: nElem = %d\n", numberOfElements);
-  //LPRINTF("CSV: offset = %d\n", (int)offset);
-  //LPRINTF("CSV: fileName = %s\n", fileName);
+  LOG("CSV\n");
+  LOGF("CSV: fileName = %s\n", fileName);
+  LOGF("CSV: maxElements = %ld\n", maxSize);
+  LOGF("CSV: ptr = %p\n", arrayPtr);
 
   char buf[BUFFER_SIZE];
   memset(buf, 0, BUFFER_SIZE * sizeof(char));
 
-  //GMXFile* gmxFile = GMXAPI_System_FileOpen(fileName, GMXAPI_OPEN_READ, GMXAPI_OPENMODE_TEXT, nullptr);
-	//GMXFile file =*(*OpenFile            )(const GMXchar *file, GMXint mode, GMXint openmode, const GMXchar *password);
+  GMXFile* gmxFile = GMXAPI_System_FileOpen(fileName, GMXAPI_OPEN_READ, GMXAPI_OPENMODE_TEXT, nullptr);
+  //GMXFile file =*(*OpenFile            )(const GMXchar *file, GMXint mode, GMXint openmode, const GMXchar *password);
 
-  //GMXAPI_System_FileClose(gmxFile);
-  GMXAPI_ReturnInt(0);
+  GMXint numberOfElements = parseCsvFile(gmxFile, arrayPtr, maxSize);
+
+  LOGF("CSV: elementsInFile = %ld\n", numberOfElements);
+
+  GMXAPI_System_FileClose(gmxFile);
+  GMXAPI_ReturnInt(numberOfElements);
 }
 
 

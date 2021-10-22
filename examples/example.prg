@@ -5,13 +5,15 @@ program example_csv;
 //import "csv.so";
 
 private
-int data[20];
+  int32 data[40];
 begin
+  set_mode(m800x600);
+
   loadData("data.csv", offset data, sizeof(data));
 
   for (y = 0; y < 2 ; y++);
-    for (x = 0; x < 10; x++)
-      write_int(0, x * 10, y * 10, 0, offset data[x + y*10]);
+    for (x = 0; x < 20; x++)
+      write(0, x * 20, y * 10, 0, offset data[x + y * 20]);
     end
   end
   loop
@@ -62,6 +64,7 @@ end
  * Reads a CSV file with data an allocated a dynamic array to store all the data
  * Returns a pointer to the dynamic array
  */
+ /*
 function loadAndAllocateData(dataFile)
 private
   string _path;
@@ -89,5 +92,5 @@ begin
   CSV_readToIntArray(_path, _data, _nElements);
   return(_data);
 end
-
+*/
 /* vim: set ts=2 sw=2 tw=0 et fileencoding=iso8859-1 :*/
