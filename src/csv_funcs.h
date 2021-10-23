@@ -8,13 +8,19 @@
 extern "C" {
 #endif
 
+
+/**
+ * Reads a CSV file and put's it on a INT8 array
+ */
+GMXvoid GMXEXT_CSV_readToInt8Array();
+
 /**
  * Reads a CSV file and put's it on a INT32 array
  */
 GMXvoid GMXEXT_CSV_readToInt32Array();
 
 /**
- * Reads a CSV file and put's it on a INT32 array
+ * Reads a CSV file and put's it on a UINT32 array
  */
 GMXvoid GMXEXT_CSV_readToUInt32Array();
 

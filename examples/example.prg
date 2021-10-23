@@ -2,24 +2,51 @@
 program example_csv;
 
 private
-  int32 data[40];
-  uint32 data2[20];
+  int8 data_i8[39];
+  int32 data_i32[39];
+  uint32 data_u32[39];
+  int tmp1;
+  int tmp2;
+  int tmp3;
 begin
   set_mode(m800x600);
 
-  loadData("data.csv", offset data, sizeof(data));
+  // int8 bit array
+  loadData("data.csv", offset data_i8, sizeof(data_i8));
 
-  for (y = 0; y < 2 ; y++);
-    for (x = 0; x < 20; x++)
-      write(0, x*30, y*10, 0, offset data[x + y * 20]);
-    end
+  write(0, 0, y, 0, "int8 array");
+  tmp1 = sizeof(data_i8);
+  write(0, 100, y, 0, offset tmp1);
+  y += 10;
+  for (x = 0; x < sizeof(data_i8); x++)
+    write(0, x*30, y, 0, offset data_i8[x]);
   end
+  y += 20;
 
-  loadData("data.csv", offset data2, sizeof(data2));
+  // int32 bit array
+  loadData("data.csv", offset data_i32, sizeof(data_i32));
 
-  for (x = 0; x < sizeof(data2); x++)
-    write(0, x*30, 200, 0, offset data2[x]);
+  write(0, 0, y, 0, "int32 array");
+  tmp2 = sizeof(data_i32);
+  write(0, 100, y, 0, offset tmp2);
+  y += 10;
+  for (x = 0; x < sizeof(data_i32); x++)
+    write(0, x*30, y, 0, offset data_i32[x]);
   end
+  y += 20;
+
+  // uint32 bit array
+  loadData("data.csv", offset data_u32, sizeof(data_u32));
+
+  write(0, 0, y, 0, "uint32 array");
+  tmp3 = sizeof(data_u32);
+  write(0, 100, y, 0, offset tmp3);
+  y += 10;
+  for (x = 0; x < sizeof(data_u32); x++)
+    write(0, x*30, y, 0, offset data_u32[x]);
+  end
+  y += 20;
+
   loop
     frame;
     if (key(_q) || key(_esc))

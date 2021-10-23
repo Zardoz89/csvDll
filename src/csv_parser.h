@@ -10,7 +10,7 @@ extern "C" {
 
 #include <stdio.h>
 
-// GMXint parseCsvFileInt8(FILE* file, GMXint8* ptr, GMXint maxSize);
+GMXint parseCsvFileInt8(FILE* file, GMXint8* ptr, GMXint maxSize);
 // GMXint parseCsvFileUInt8(FILE* file, GMXuint8* ptr, GMXint maxSize);
 // GMXint parseCsvFileInt16(FILE* file, GMXint16* ptr, GMXint maxSize);
 // GMXint parseCsvFileUInt16(FILE* file, GMXuint16* ptr, GMXint maxSize);
