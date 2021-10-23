@@ -1,11 +1,9 @@
 // Example program of using csv dll to read data from a CSV file
 program example_csv;
 
-// copy the propiated csv.so or csv.dll to this folder and modify the import
-//import "csv.so";
-
 private
   int32 data[40];
+  uint32 data2[20];
 begin
   set_mode(m800x600);
 
@@ -13,8 +11,14 @@ begin
 
   for (y = 0; y < 2 ; y++);
     for (x = 0; x < 20; x++)
-      write(0, x * 20, y * 10, 0, offset data[x + y * 20]);
+      write(0, x*30, y*10, 0, offset data[x + y * 20]);
     end
+  end
+
+  loadData("data.csv", offset data2, sizeof(data2));
+
+  for (x = 0; x < sizeof(data2); x++)
+    write(0, x*30, 200, 0, offset data2[x]);
   end
   loop
     frame;
@@ -26,7 +30,7 @@ begin
 end
 
 /**
- * Generates the relative path to the data files 
+ * Generates the relative path to the data files
  */
 function pathResolve(file)
 begin
@@ -43,7 +47,7 @@ private
   string _msg;
 begin
   _path = pathResolve(dataFile);
-  _retVal = CSV_readToIntArray(_path, _offset, size);
+  _retVal = csv_readtointarray(_path, _offset, size);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
     write(0, 0, 0, 0, _msg);
@@ -74,7 +78,7 @@ private
   int pointer _data;
 begin
   _path = pathResolve(dataFile);
-  _nElements = CSV_readToIntArray(_path, 0, max_int);
+  _nElements = csv_readtointarray(_path, 0, max_int);
   if (_nElements <= 0)
     _msg = "Error al abrir fichero de datos: " + _path;
     write(0, 0, 0, 0, _msg);
@@ -89,7 +93,7 @@ begin
     end
   end
   _data = malloc(_nElements);
-  CSV_readToIntArray(_path, _data, _nElements);
+  csv_readtointarray(_path, _data, _nElements);
   return(_data);
 end
 */

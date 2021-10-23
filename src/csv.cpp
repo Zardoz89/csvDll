@@ -13,7 +13,8 @@ GMXDEFINE_LIBRARY_PROPERTIES(GMXEXT_mod_csv,
 
 GMXDEFINE_LIBRARY_EXPORTS(GMXEXT_mod_csv,
   GMXDEFINE_FUNCTIONS(
-    "CSV_readToIntArray(S,I32P,I)", "I", 1, GMXEXT_CSV_readToInt32Array
+    "csv_readtointarray(S,I32P,I)", "I", 1, GMXEXT_CSV_readToInt32Array,
+    "csv_readtointarray(S,U32P,I)", "I", 1, GMXEXT_CSV_readToUInt32Array
   /* prototipo Gemix, retType, is_timing, ptrFunción  */
   );
 );
