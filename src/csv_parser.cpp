@@ -56,7 +56,7 @@ GMXint parseCsvFileInt8(FILE* file, GMXint8* ptr, GMXint maxSize)
   return index;
 }
 
-GMXint parseCsvFileUInt8(FILE* file, GMXint8* ptr, GMXint maxSize)
+GMXint parseCsvFileUInt8(FILE* file, GMXuint8* ptr, GMXint maxSize)
 {
   assert(file != NULL);
 
