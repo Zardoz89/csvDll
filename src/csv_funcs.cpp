@@ -26,12 +26,10 @@ GMXint getArrayMaxSizeInBytes() {
 #define LOG_N_ELEMENTS()  LOGF("CSV: elementsInFile = %ld\n", numberOfElements);
 #endif
 
-// csv_readToArray(S, I8P, I) , "I"
 GMXvoid GMXEXT_CSV_readToInt8Array() {
+  GMXint8* arrayPtr = GMXAPI_ParamGetInt8Ptr();
   GMXint maxSizeBytes = getArrayMaxSizeInBytes();
   GMXint maxSize = maxSizeBytes / sizeof(GMXint8);
-
-  GMXint8* arrayPtr = GMXAPI_ParamGetInt8Ptr();
   GMXuint8* fileName = GMXAPI_ParamGetString();
 
   LOG("CSV\n");
@@ -63,10 +61,10 @@ GMXvoid GMXEXT_CSV_readToInt8Array() {
 
 /*
 GMXvoid GMXEXT_CSV_readToUInt8Array() {
+  GMXuint8* arrayPtr = GMXAPI_ParamGetUInt8Ptr();
   GMXint maxSizeBytes = getArrayMaxSizeInBytes();
   GMXint maxSize = maxSizeBytes / sizeof(GMXuint8);
 
-  GMXuint8* arrayPtr = GMXAPI_ParamGetUInt8Ptr();
   GMXuint8* fileName = GMXAPI_ParamGetString();
 
   LOG("CSV\n");
@@ -96,12 +94,11 @@ GMXvoid GMXEXT_CSV_readToUInt8Array() {
 }
 */
 
-// csv_readToArray(S, I32P, I) , "I"
 GMXvoid GMXEXT_CSV_readToInt32Array() {
+  GMXint32* arrayPtr = GMXAPI_ParamGetInt32Ptr();
   GMXint maxSizeBytes = getArrayMaxSizeInBytes();
   GMXint maxSize = maxSizeBytes / sizeof(GMXint32);
 
-  GMXint32* arrayPtr = GMXAPI_ParamGetInt32Ptr();
   GMXuint8* fileName = GMXAPI_ParamGetString();
 
   LOG("CSV\n");
@@ -130,12 +127,11 @@ GMXvoid GMXEXT_CSV_readToInt32Array() {
   GMXAPI_ReturnInt(numberOfElements);
 }
 
-// csv_readToArray(S, U32P, I) , "I"
 GMXvoid GMXEXT_CSV_readToUInt32Array() {
+  GMXuint32* arrayPtr = GMXAPI_ParamGetUInt32Ptr();
   GMXint maxSizeBytes = getArrayMaxSizeInBytes();
   GMXint maxSize = maxSizeBytes / sizeof(GMXuint32);
 
-  GMXuint32* arrayPtr = GMXAPI_ParamGetUInt32Ptr();
   GMXuint8* fileName = GMXAPI_ParamGetString();
 
   LOG("CSV\n");

@@ -76,7 +76,7 @@ private
   string _msg;
 begin
   _path = pathResolve(dataFile);
-  _retVal = CSV_ReadToArray(_path, _ptr, _size);
+  _retVal = CSV_ReadToArray(_path, _size, _ptr);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
     write(0, 0, 0, 0, _msg);
@@ -100,7 +100,7 @@ private
   string _msg;
 begin
   _path = pathResolve(dataFile);
-  _retVal = CSV_ReadToArray(_path, _ptr, _size);
+  _retVal = CSV_ReadToArray(_path, _size, _ptr);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
     write(0, 0, 0, 0, _msg);

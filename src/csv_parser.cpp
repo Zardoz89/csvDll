@@ -10,6 +10,9 @@
 
 #include "csv.h"
 
+// NOTA: DIV y Gemix alinea los datos a 32 bits. En caso de arrays, alinea el array en si
+// (metiendo un padding al final), pero no los elementos del array en si.
+
 #define CLAMP(value, low, high) (((value)<(low))?(low):(((value)>(high))?(high):(value)))
 
 const char* VALUE_SEPARATOR = ",";

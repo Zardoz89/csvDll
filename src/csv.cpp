@@ -13,9 +13,9 @@ GMXDEFINE_LIBRARY_PROPERTIES(GMXEXT_mod_csv,
 
 GMXDEFINE_LIBRARY_EXPORTS(GMXEXT_mod_csv,
   GMXDEFINE_FUNCTIONS(
-      "CSV_ReadToArray(S,I8P,I)",  "I", 1, GMXEXT_CSV_readToInt8Array,
-      "CSV_ReadToArray(S,I32P,I)", "I", 1, GMXEXT_CSV_readToInt32Array
-    // "CSV_ReadToArray(S,U32P,I)", "I", 1, GMXEXT_CSV_readToUInt32Array
+      "csv_readtoarray(S,I,I8P=0)",  "I", 1, GMXEXT_CSV_readToInt8Array,
+      "csv_readtoarray(S,I,I32P=0)", "I", 1, GMXEXT_CSV_readToInt32Array
+    // "CSV_ReadToArray(S,I,U32P)", "I", 1, GMXEXT_CSV_readToUInt32Array
   );
 );
 
