@@ -2,18 +2,26 @@ compiler_options _extended_conditions, _use_cstyle;
 // Example program of using csv dll to read data from a CSV file
 program example_csv;
 
+typedef
+  type DynArray
+    int length;
+    int32* data;
+  end
+end
+
+
 private
   int8 data_i8[40];
   int16 data_i16[40];
   int32 data_i32[40];
   uint32 data_u32[40];
-  
+
   int tmp1;
   int tmp2;
   int tmp3;
   int tmp4;
 
-  int32* dyn;
+  DynArray dyn;
 begin
   mode_set(1024, 768);
 
@@ -34,25 +42,25 @@ begin
   loadData("data.csv", &data_i16, sizeof(data_i16));
 
   write(0, 0, y, 0, "int16 array");
-  tmp2 = sizeof(data_i16) / sizeof(int16);
+  tmp2 = sizeof(data_i16) / 2;
   write(0, 100, y, 0, offset tmp2);
   y += 10;
   for (x = 0; x < tmp2; x++)
     write(0, (x%20)*40, y + (x/20)*10, 0, offset data_i32[x]);
   end
-  y += 30;
+  y += 20;
 
   // int32 bit array
   loadData("data.csv", &data_i32, sizeof(data_i32));
 
   write(0, 0, y, 0, "int32 array");
   tmp3 = sizeof(data_i32) / sizeof(int32);
-  write(0, 100, y, 0, offset tmp2);
+  write(0, 100, y, 0, offset tmp3);
   y += 10;
   for (x = 0; x < tmp3; x++)
     write(0, (x%20)*40, y + (x/20)*10, 0, offset data_i32[x]);
   end
-  y += 30;
+  y += 20;
 
 
   // uint32 bit array
@@ -65,10 +73,17 @@ begin
   for (x = 0; x < tmp4; x++)
     write(0, (x%20)*40, y + (x/20)*10, 0, offset data_u32[x]);
   end
-  y += 20;
+  y += 30;
 
-  dyn = loadAndAllocateData("data.csv");
-  write(0, (x%20)*40, y + (x/20)*10, 0, offset dyn[1]);
+  // Dinamico de int32
+  dyn = loadAndAllocateData("data2.csv");
+  write(0, 0, y, 0, "dynamic array from csv");
+  write(0, 200, y, 0, offset dyn.length);
+  y += 10;
+  for (x = 0; x < dyn.length; x++)
+    write(0, (x%20)*40, y + (x/20)*10, 0, offset dyn.data[x]);
+  end
+  y += 20;
 
   loop
     frame;
@@ -215,17 +230,16 @@ end
  * Reads a CSV file with data an allocated a dynamic array to store all the data
  * Returns a pointer to the dynamic array
  */
-function loadAndAllocateData(string dataFile)
+function DynArray loadAndAllocateData(string dataFile)
 private
   string _path;
   int _retVal = 0;
-  int _nElements = 0;
   string _msg;
-  int32 *_data = null;
+  DynArray _data;
 begin
   _path = pathResolve(dataFile);
-  _nElements = CSV_ReadToArray(_path, MAX_INT, _data);
-  if (_nElements <= 0)
+  _data.length = CSV_ReadToArray(_path, MAX_INT, _data.data);
+  if (_data->length <= 0)
     _msg = "Error al abrir fichero de datos: " + _path;
     write(0, 0, 0, 0, _msg);
     loop
@@ -238,9 +252,9 @@ begin
       frame;
     end
   end
-  //return(_nElements);
-  _data = memory_new(_nElements * sizeof(int32));
-  CSV_ReadToArray(_path, _nElements * sizeof(int32), _data);
+
+  _data->data = memory_new(_data.length * sizeof(int32));
+  CSV_ReadToArray(_path, _data.length * sizeof(int32), _data.data);
   return(_data);
 end
 
