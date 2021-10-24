@@ -1,49 +1,51 @@
+compiler_options _use_cstyle;
 // Example program of using csv dll to read data from a CSV file
 program example_csv;
 
 private
-  int8 data_i8[39];
-  int32 data_i32[39];
-  uint32 data_u32[39];
+  int8 data_i8[40];
+  int32 data_i32[40];
+  uint32 data_u32[40];
   int tmp1;
   int tmp2;
   int tmp3;
+  int caca;
 begin
-  set_mode(m800x600);
+  mode_set(1024, 768);
 
   // int8 bit array
-  loadData("data.csv", offset data_i8, sizeof(data_i8));
+  loadData("data.csv", &data_i8, sizeof(data_i8));
 
   write(0, 0, y, 0, "int8 array");
-  tmp1 = sizeof(data_i8);
+  tmp1 = sizeof(data_i8) ;
   write(0, 100, y, 0, offset tmp1);
   y += 10;
-  for (x = 0; x < sizeof(data_i8); x++)
-    write(0, x*30, y, 0, offset data_i8[x]);
+  for (x = 0; x < tmp1; x++)
+    write(0, (x%20)*40, y + (x/20)*10, 0, offset data_i8[x]);
   end
   y += 20;
 
   // int32 bit array
-  loadData("data.csv", offset data_i32, sizeof(data_i32));
+  loadData("data.csv", &data_i32, sizeof(data_i32));
 
   write(0, 0, y, 0, "int32 array");
-  tmp2 = sizeof(data_i32);
+  tmp2 = sizeof(data_i32) / sizeof(int32);
   write(0, 100, y, 0, offset tmp2);
   y += 10;
-  for (x = 0; x < sizeof(data_i32); x++)
-    write(0, x*30, y, 0, offset data_i32[x]);
+  for (x = 0; x < tmp2; x++)
+    write(0, (x%20)*40, y + (x/20)*10, 0, offset data_i32[x]);
   end
-  y += 20;
+  y += 30;
 
   // uint32 bit array
   loadData("data.csv", offset data_u32, sizeof(data_u32));
 
   write(0, 0, y, 0, "uint32 array");
-  tmp3 = sizeof(data_u32);
+  tmp3 = sizeof(data_u32) / sizeof(uint32);
   write(0, 100, y, 0, offset tmp3);
   y += 10;
-  for (x = 0; x < sizeof(data_u32); x++)
-    write(0, x*30, y, 0, offset data_u32[x]);
+  for (x = 0; x < tmp3; x++)
+    write(0, (x%20)*40, y + (x/20)*10, 0, offset data_u32[x]);
   end
   y += 20;
 
@@ -67,14 +69,14 @@ end
 /**
  * Reads a CSV file with data
  */
-function loadData(dataFile, _offset, size)
+function loadData(string dataFile, int32*_ptr, int _size)
 private
   string _path;
   int _retVal = 0;
   string _msg;
 begin
   _path = pathResolve(dataFile);
-  _retVal = csv_readtointarray(_path, _offset, size);
+  _retVal = CSV_ReadToArray(_path, _ptr, _size);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
     write(0, 0, 0, 0, _msg);
@@ -91,6 +93,29 @@ begin
   return(_retVal);
 end
 
+function loadData(string dataFile, int8*_ptr, int _size)
+private
+  string _path;
+  int _retVal = 0;
+  string _msg;
+begin
+  _path = pathResolve(dataFile);
+  _retVal = CSV_ReadToArray(_path, _ptr, _size);
+  if (_retVal <= 0)
+    _msg = "Error reading data file: " + _path;
+    write(0, 0, 0, 0, _msg);
+    loop
+      // abort execution
+      if (key(_q) || key(_esc))
+        let_me_alone();
+        break;
+      end
+
+      frame;
+    end
+  end
+  return(_retVal);
+end
 /**
  * Reads a CSV file with data an allocated a dynamic array to store all the data
  * Returns a pointer to the dynamic array
