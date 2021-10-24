@@ -59,7 +59,6 @@ GMXvoid GMXEXT_CSV_readToInt8Array() {
   GMXAPI_ReturnInt(numberOfElements);
 }
 
-/*
 GMXvoid GMXEXT_CSV_readToUInt8Array() {
   GMXuint8* arrayPtr = GMXAPI_ParamGetUInt8Ptr();
   GMXint maxSizeBytes = getArrayMaxSizeInBytes();
@@ -92,7 +91,6 @@ GMXvoid GMXEXT_CSV_readToUInt8Array() {
   GMXAPI_System_FileClose(gmxFile);
   GMXAPI_ReturnInt(numberOfElements);
 }
-*/
 
 GMXvoid GMXEXT_CSV_readToInt16Array() {
   GMXint16* arrayPtr = GMXAPI_ParamGetInt16Ptr();

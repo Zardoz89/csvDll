@@ -14,6 +14,7 @@ extern "C" {
  */
 GMXvoid GMXEXT_CSV_readToInt8Array();
 
+GMXvoid GMXEXT_CSV_readToUInt8Array();
 
 /**
  * Reads a CSV file and put's it on a INT16 array
