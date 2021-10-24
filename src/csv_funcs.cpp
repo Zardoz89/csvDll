@@ -16,6 +16,16 @@ GMXint getArrayMaxSizeInBytes() {
   return maxSize;
 }
 
+#if GMX_BUILD_32BIT
+#define LOG_SIZEOF()      LOGF("CSV: sizeof = %d\n", GMXAPI_System_GetSizeOfBase())
+#define LOG_MAX_SIZE()    LOGF("CSV: maxSize = %d\n", maxSize)
+#define LOG_N_ELEMENTS()  LOGF("CSV: elementsInFile = %d\n", numberOfElements);
+#else
+#define LOG_SIZEOF()      LOGF("CSV: sizeof = %ld\n", GMXAPI_System_GetSizeOfBase())
+#define LOG_MAX_SIZE()    LOGF("CSV: maxSize = %ld\n", maxSize)
+#define LOG_N_ELEMENTS()  LOGF("CSV: elementsInFile = %ld\n", numberOfElements);
+#endif
+
 // csv_readToArray(S, I8P, I) , "I"
 GMXvoid GMXEXT_CSV_readToInt8Array() {
   GMXint maxSizeBytes = getArrayMaxSizeInBytes();
@@ -26,8 +36,8 @@ GMXvoid GMXEXT_CSV_readToInt8Array() {
 
   LOG("CSV\n");
   LOGF("CSV: fileName = %s\n", fileName);
-  LOGF("CSV: sizeof = %ld\n", GMXAPI_System_GetSizeOfBase());
-  LOGF("CSV: maxSize = %ld\n", maxSize);
+  LOG_SIZEOF();
+  LOG_MAX_SIZE();
   LOGF("CSV: ptr = %p\n", arrayPtr);
 
   char buf[BUFFER_SIZE];
@@ -45,11 +55,46 @@ GMXvoid GMXEXT_CSV_readToInt8Array() {
     numberOfElements = -1;
   }
 
-  LOGF("CSV: elementsInFile = %ld\n", numberOfElements);
+  LOG_N_ELEMENTS();
 
   GMXAPI_System_FileClose(gmxFile);
   GMXAPI_ReturnInt(numberOfElements);
 }
+
+/*
+GMXvoid GMXEXT_CSV_readToUInt8Array() {
+  GMXint maxSizeBytes = getArrayMaxSizeInBytes();
+  GMXint maxSize = maxSizeBytes / sizeof(GMXuint8);
+
+  GMXuint8* arrayPtr = GMXAPI_ParamGetUInt8Ptr();
+  GMXuint8* fileName = GMXAPI_ParamGetString();
+
+  LOG("CSV\n");
+  LOGF("CSV: fileName = %s\n", fileName);
+  LOG_SIZEOF();
+  LOG_MAX_SIZE();
+  LOGF("CSV: ptr = %p\n", arrayPtr);
+
+  char buf[BUFFER_SIZE];
+  memset(buf, 0, BUFFER_SIZE * sizeof(char));
+
+  GMXFile* gmxFile = GMXAPI_System_FileOpen(fileName, GMXAPI_OPEN_READ, GMXAPI_OPENMODE_TEXT, nullptr);
+
+  GMXint numberOfElements = 0;
+  if (gmxFile != NULL && gmxFile->f != NULL) {
+    LOG("CSV: file is opened.\n");
+    numberOfElements = parseCsvFileUInt8(gmxFile->f, arrayPtr, maxSize);
+  } else {
+    LOG("CSV: file not found.\n");
+    numberOfElements = -1;
+  }
+
+  LOG_N_ELEMENTS();
+
+  GMXAPI_System_FileClose(gmxFile);
+  GMXAPI_ReturnInt(numberOfElements);
+}
+*/
 
 // csv_readToArray(S, I32P, I) , "I"
 GMXvoid GMXEXT_CSV_readToInt32Array() {
@@ -61,8 +106,8 @@ GMXvoid GMXEXT_CSV_readToInt32Array() {
 
   LOG("CSV\n");
   LOGF("CSV: fileName = %s\n", fileName);
-  LOGF("CSV: sizeof = %ld\n", GMXAPI_System_GetSizeOfBase());
-  LOGF("CSV: maxSize = %ld\n", maxSize);
+  LOG_SIZEOF();
+  LOG_MAX_SIZE();
   LOGF("CSV: ptr = %p\n", arrayPtr);
 
   char buf[BUFFER_SIZE];
@@ -79,7 +124,7 @@ GMXvoid GMXEXT_CSV_readToInt32Array() {
     numberOfElements = -1;
   }
 
-  LOGF("CSV: elementsInFile = %ld\n", numberOfElements);
+  LOG_N_ELEMENTS();
 
   GMXAPI_System_FileClose(gmxFile);
   GMXAPI_ReturnInt(numberOfElements);
@@ -95,8 +140,8 @@ GMXvoid GMXEXT_CSV_readToUInt32Array() {
 
   LOG("CSV\n");
   LOGF("CSV: fileName = %s\n", fileName);
-  LOGF("CSV: sizeof = %ld\n", GMXAPI_System_GetSizeOfBase());
-  LOGF("CSV: maxSize = %ld\n", maxSize);
+  LOG_SIZEOF();
+  LOG_MAX_SIZE();
   LOGF("CSV: ptr = %p\n", arrayPtr);
 
   char buf[BUFFER_SIZE];
@@ -113,7 +158,7 @@ GMXvoid GMXEXT_CSV_readToUInt32Array() {
     numberOfElements = -1;
   }
 
-  LOGF("CSV: elementsInFile = %ld\n", numberOfElements);
+  LOG_N_ELEMENTS();
 
   GMXAPI_System_FileClose(gmxFile);
   GMXAPI_ReturnInt(numberOfElements);

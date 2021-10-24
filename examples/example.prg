@@ -1,4 +1,4 @@
-compiler_options _use_cstyle;
+compiler_options _extended_conditions, _use_cstyle;
 // Example program of using csv dll to read data from a CSV file
 program example_csv;
 

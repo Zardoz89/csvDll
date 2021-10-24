@@ -10,6 +10,8 @@
 
 #include "csv.h"
 
+#define CLAMP(value, low, high) (((value)<(low))?(low):(((value)>(high))?(high):(value)))
+
 const char* VALUE_SEPARATOR = ",";
 const char* VALUE_SEPARATOR_WITH_EOL = ",\r\n"; // El elemento separador concatenado con EOL
 
@@ -38,7 +40,38 @@ GMXint parseCsvFileInt8(FILE* file, GMXint8* ptr, GMXint maxSize)
       // Recorremos todos los tokens/valores de la linea
       if (ptr != 0) {
         if (token != NULL) {
-          GMXint8 val = (GMXint8) strtol(token, NULL, 0);
+          GMXint8 val = (GMXint8) CLAMP(strtol(token, NULL, 0), INT8_MIN, INT8_MAX);
+          ptr[index] = val;
+        }
+      }
+      token = strtok(NULL, VALUE_SEPARATOR_WITH_EOL);
+      // El indice lo aumentamos desde aqui para contar solo los tokens validos
+      index++;
+    }
+
+  }
+  return index;
+}
+
+GMXint parseCsvFileUInt8(FILE* file, GMXint8* ptr, GMXint maxSize)
+{
+  assert(file != NULL);
+
+  char buf[BUFFER_SIZE];
+  GMXint index = 0;
+  memset(buf, 0, BUFFER_SIZE * sizeof(char));
+  while (index < maxSize && fgets(buf, BUFFER_SIZE-1, file) != NULL) {
+    dropBufferFrom(buf, '\r');
+    dropBufferFrom(buf, '\n'); // Purgar fin de linea CRLF o LF
+    dropBufferFrom(buf, '#'); // Comentarios
+    LOGF("CSV: buf=%s\n", buf);
+    const char* token = strtok(buf, VALUE_SEPARATOR);
+    while (index < maxSize && token != NULL && *token != 0) {
+
+      // Recorremos todos los tokens/valores de la linea
+      if (ptr != 0) {
+        if (token != NULL) {
+          GMXuint8 val = (GMXuint8) GMXMIN(strtoul(token, NULL, 0), UINT8_MAX);
           ptr[index] = val;
         }
       }
@@ -69,7 +102,7 @@ GMXint parseCsvFileInt32(FILE* file, GMXint32* ptr, GMXint maxSize)
       // Recorremos todos los tokens/valores de la linea
       if (ptr != 0) {
         if (token != NULL) {
-          GMXint32 val = (GMXint32) strtol(token, NULL, 0);
+          GMXint32 val = (GMXint32) CLAMP(strtol(token, NULL, 0), INT32_MIN, INT32_MAX);
           ptr[index] = val;
         }
       }
@@ -100,7 +133,7 @@ GMXint parseCsvFileUInt32(FILE* file, GMXuint32* ptr, GMXint maxSize)
       // Recorremos todos los tokens/valores de la linea
       if (ptr != 0) {
         if (token != NULL) {
-          GMXuint32 val = (GMXuint32) strtoul(token, NULL, 0);
+          GMXuint32 val = (GMXuint32) GMXMIN(strtoul(token, NULL, 0), UINT32_MAX);
           ptr[index] = val;
         }
       }
