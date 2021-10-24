@@ -125,6 +125,39 @@ GMXvoid GMXEXT_CSV_readToInt16Array() {
   GMXAPI_ReturnInt(numberOfElements);
 }
 
+GMXvoid GMXEXT_CSV_readToUInt16Array() {
+  GMXuint16* arrayPtr = GMXAPI_ParamGetUInt16Ptr();
+  GMXint maxSizeBytes = getArrayMaxSizeInBytes();
+  GMXint maxSize = maxSizeBytes / sizeof(GMXuint16);
+
+  GMXuint8* fileName = GMXAPI_ParamGetString();
+
+  LOG("CSV\n");
+  LOGF("CSV: fileName = %s\n", fileName);
+  LOG_SIZEOF();
+  LOG_MAX_SIZE();
+  LOGF("CSV: ptr = %p\n", arrayPtr);
+
+  char buf[BUFFER_SIZE];
+  memset(buf, 0, BUFFER_SIZE * sizeof(char));
+
+  GMXFile* gmxFile = GMXAPI_System_FileOpen(fileName, GMXAPI_OPEN_READ, GMXAPI_OPENMODE_TEXT, nullptr);
+
+  GMXint numberOfElements = 0;
+  if (gmxFile != NULL && gmxFile->f != NULL) {
+    LOG("CSV: file is opened.\n");
+    numberOfElements = parseCsvFileUInt16(gmxFile->f, arrayPtr, maxSize);
+  } else {
+    LOG("CSV: file not found.\n");
+    numberOfElements = -1;
+  }
+
+  LOG_N_ELEMENTS();
+
+  GMXAPI_System_FileClose(gmxFile);
+  GMXAPI_ReturnInt(numberOfElements);
+}
+
 GMXvoid GMXEXT_CSV_readToInt32Array() {
   GMXint32* arrayPtr = GMXAPI_ParamGetInt32Ptr();
   GMXint maxSizeBytes = getArrayMaxSizeInBytes();

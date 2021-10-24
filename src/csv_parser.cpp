@@ -118,6 +118,37 @@ GMXint parseCsvFileInt16(FILE* file, GMXint16* ptr, GMXint maxSize)
   return index;
 }
 
+GMXint parseCsvFileUInt16(FILE* file, GMXuint16* ptr, GMXint maxSize)
+{
+  assert(file != NULL);
+
+  char buf[BUFFER_SIZE];
+  GMXint index = 0;
+  memset(buf, 0, BUFFER_SIZE * sizeof(char));
+  while (index < maxSize && fgets(buf, BUFFER_SIZE-1, file) != NULL) {
+    dropBufferFrom(buf, '\r');
+    dropBufferFrom(buf, '\n'); // Purgar fin de linea CRLF o LF
+    dropBufferFrom(buf, '#'); // Comentarios
+    LOGF("CSV: buf=%s\n", buf);
+    const char* token = strtok(buf, VALUE_SEPARATOR);
+    while (index < maxSize && token != NULL && *token != 0) {
+
+      // Recorremos todos los tokens/valores de la linea
+      if (ptr != 0) {
+        if (token != NULL) {
+          GMXuint16 val = (GMXuint16) GMXMIN(strtoul(token, NULL, 0), UINT16_MAX);
+          ptr[index] = val;
+        }
+      }
+      token = strtok(NULL, VALUE_SEPARATOR_WITH_EOL);
+      // El indice lo aumentamos desde aqui para contar solo los tokens validos
+      index++;
+    }
+
+  }
+  return index;
+}
+
 GMXint parseCsvFileInt32(FILE* file, GMXint32* ptr, GMXint maxSize)
 {
   assert(file != NULL);
