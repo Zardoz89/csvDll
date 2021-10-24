@@ -4,12 +4,13 @@ program example_csv;
 
 private
   int8 data_i8[40];
+  int16 data_i16[40];
   int32 data_i32[40];
   uint32 data_u32[40];
   int tmp1;
   int tmp2;
   int tmp3;
-  int caca;
+  int tmp4;
 begin
   mode_set(1024, 768);
 
@@ -25,11 +26,12 @@ begin
   end
   y += 20;
 
-  // int32 bit array
-  loadData("data.csv", &data_i32, sizeof(data_i32));
 
-  write(0, 0, y, 0, "int32 array");
-  tmp2 = sizeof(data_i32) / sizeof(int32);
+  // int16 bit array
+  loadData("data.csv", &data_i16, sizeof(data_i16));
+
+  write(0, 0, y, 0, "int16 array");
+  tmp2 = sizeof(data_i16) / sizeof(int16);
   write(0, 100, y, 0, offset tmp2);
   y += 10;
   for (x = 0; x < tmp2; x++)
@@ -37,18 +39,32 @@ begin
   end
   y += 30;
 
-  // uint32 bit array
-  loadData("data.csv", offset data_u32, sizeof(data_u32));
+/*
+  // int32 bit array
+  loadData("data.csv", &data_i32, sizeof(data_i32));
 
-  write(0, 0, y, 0, "uint32 array");
-  tmp3 = sizeof(data_u32) / sizeof(uint32);
-  write(0, 100, y, 0, offset tmp3);
+  write(0, 0, y, 0, "int32 array");
+  tmp3 = sizeof(data_i32) / sizeof(int32);
+  write(0, 100, y, 0, offset tmp2);
   y += 10;
   for (x = 0; x < tmp3; x++)
+    write(0, (x%20)*40, y + (x/20)*10, 0, offset data_i32[x]);
+  end
+  y += 30;
+*/
+/*
+  // uint32 bit array
+  loadData("data.csv", &data_u32, sizeof(data_u32));
+
+  write(0, 0, y, 0, "uint32 array");
+  tmp4 = sizeof(data_u32) / sizeof(uint32);
+  write(0, 100, y, 0, offset tmp4);
+  y += 10;
+  for (x = 0; x < tmp4; x++)
     write(0, (x%20)*40, y + (x/20)*10, 0, offset data_u32[x]);
   end
   y += 20;
-
+*/
   loop
     frame;
     if (key(_q) || key(_esc))
@@ -69,7 +85,58 @@ end
 /**
  * Reads a CSV file with data
  */
+ /*
 function loadData(string dataFile, int32*_ptr, int _size)
+private
+  string _path;
+  int _retVal = 0;
+  string _msg;
+begin
+  _path = pathResolve(dataFile);
+  _retVal = CSV_ReadToArray(_path, _size, _ptr);
+  if (_retVal <= 0)
+    _msg = "Error reading data file: " + _path;
+    write(0, 0, 0, 0, _msg);
+    loop
+      // abort execution
+      if (key(_q) || key(_esc))
+        let_me_alone();
+        break;
+      end
+
+      frame;
+    end
+  end
+  return(_retVal);
+end
+
+
+function loadData(string dataFile, uint32*_ptr, int _size)
+private
+  string _path;
+  int _retVal = 0;
+  string _msg;
+begin
+  _path = pathResolve(dataFile);
+  _retVal = CSV_ReadToArray(_path, _size, _ptr);
+  if (_retVal <= 0)
+    _msg = "Error reading data file: " + _path;
+    write(0, 0, 0, 0, _msg);
+    loop
+      // abort execution
+      if (key(_q) || key(_esc))
+        let_me_alone();
+        break;
+      end
+
+      frame;
+    end
+  end
+  return(_retVal);
+end
+*/
+
+function loadData(string dataFile, int16*_ptr, int _size)
 private
   string _path;
   int _retVal = 0;
@@ -116,6 +183,7 @@ begin
   end
   return(_retVal);
 end
+
 /**
  * Reads a CSV file with data an allocated a dynamic array to store all the data
  * Returns a pointer to the dynamic array

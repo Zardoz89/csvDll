@@ -160,7 +160,6 @@ GMXvoid GMXEXT_CSV_readToInt32Array() {
   GMXAPI_ReturnInt(numberOfElements);
 }
 
-/*
 GMXvoid GMXEXT_CSV_readToUInt32Array() {
   GMXuint32* arrayPtr = GMXAPI_ParamGetUInt32Ptr();
   GMXint maxSizeBytes = getArrayMaxSizeInBytes();
@@ -193,6 +192,5 @@ GMXvoid GMXEXT_CSV_readToUInt32Array() {
   GMXAPI_System_FileClose(gmxFile);
   GMXAPI_ReturnInt(numberOfElements);
 }
-*/
 
 /* vim: set ts=2 sw=2 tw=0 et fileencoding=utf-8 :*/
