@@ -14,10 +14,12 @@ private
   int8 data_i8[40];
   uint16 data_u16[40];
   int32 data_i32[40];
+  float data_f[25];
 
   int tmp1;
   int tmp2;
   int tmp3;
+  int tmp4;
 
   DynArray dyn;
 begin
@@ -60,6 +62,17 @@ begin
   end
   y += 20;
 
+  // float array
+  loadData("dataf.csv", &data_f, sizeof(data_f));
+
+  write(0, 0, y, 0, "float array");
+  tmp4 = sizeof(data_f) / sizeof(float);
+  write(0, 100, y, 0, offset tmp4);
+  y += 10;
+  for (x = 0; x < tmp4; x++)
+    write(0, (x%10)*70, y + (x/10)*10, 0, offset data_f[x]);
+  end
+  y += 30;
 
   // Dinamico de int32
   dyn = loadAndAllocateData("data2.csv");
@@ -235,6 +248,31 @@ begin
   end
   return(_retVal);
 end
+
+function int loadData(string dataFile, float*_ptr, int _size)
+private
+  string _path;
+  int _retVal = 0;
+  string _msg;
+begin
+  _path = pathResolve(dataFile);
+  _retVal = CSV_ReadToArray(_path, _size, _ptr);
+  if (_retVal <= 0)
+    _msg = "Error reading data file: " + _path;
+    write(0, 0, 0, 0, _msg);
+    loop
+      // abort execution
+      if (key(_q) || key(_esc))
+        let_me_alone();
+        break;
+      end
+
+      frame;
+    end
+  end
+  return(_retVal);
+end
+
 
 /**
  * Reads a CSV file with data an allocated a dynamic array to store all the data

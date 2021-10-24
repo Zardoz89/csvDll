@@ -20,8 +20,9 @@ GMXDEFINE_LIBRARY_EXPORTS(GMXEXT_mod_csv,
       "CSV_ReadToArray(S,I,I32P)",  "I", 1, GMXEXT_CSV_readToInt32Array,
       "CSV_ReadToArray(S,I,UI32P)", "I", 1, GMXEXT_CSV_readToUInt32Array,
       "CSV_ReadToArray(S,I,I64P)",  "I", 1, GMXEXT_CSV_readToInt64Array,
-      "CSV_ReadToArray(S,I,UI64P)", "I", 1, GMXEXT_CSV_readToUInt64Array
+      "CSV_ReadToArray(S,I,UI64P)", "I", 1, GMXEXT_CSV_readToUInt64Array,
+      "CSV_ReadToArray(S,I,FP)",    "I", 1, GMXEXT_CSV_readToFloatArray,
+      "CSV_ReadToArray(S,I,DP)",    "I", 1, GMXEXT_CSV_readToDoubleArray
       );
     );
-
 /* vim: set ts=2 sw=2 tw=0 et fileencoding=utf-8 :*/

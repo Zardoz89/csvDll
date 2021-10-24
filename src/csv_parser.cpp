@@ -273,6 +273,68 @@ GMXint parseCsvFileUInt64(FILE* file, GMXuint64* ptr, GMXint maxSize)
   return index;
 }
 
+GMXint parseCsvFileFloat(FILE* file, GMXfloat* ptr, GMXint maxSize)
+{
+  assert(file != NULL);
+
+  char buf[BUFFER_SIZE];
+  GMXint index = 0;
+  memset(buf, 0, BUFFER_SIZE * sizeof(char));
+  while (index < maxSize && fgets(buf, BUFFER_SIZE-1, file) != NULL) {
+    dropBufferFrom(buf, '\r');
+    dropBufferFrom(buf, '\n'); // Purgar fin de linea CRLF o LF
+    dropBufferFrom(buf, '#'); // Comentarios
+    LOGF("CSV: buf=%s\n", buf);
+    const char* token = strtok(buf, VALUE_SEPARATOR);
+    while (index < maxSize && token != NULL && *token != 0) {
+
+      // Recorremos todos los tokens/valores de la linea
+      if (ptr != 0) {
+        if (token != NULL) {
+          GMXfloat val = strtof(token, NULL);
+          ptr[index] = val;
+        }
+      }
+      token = strtok(NULL, VALUE_SEPARATOR_WITH_EOL);
+      // El indice lo aumentamos desde aqui para contar solo los tokens validos
+      index++;
+    }
+
+  }
+  return index;
+}
+
+GMXint parseCsvFileDouble(FILE* file, GMXdouble* ptr, GMXint maxSize)
+{
+  assert(file != NULL);
+
+  char buf[BUFFER_SIZE];
+  GMXint index = 0;
+  memset(buf, 0, BUFFER_SIZE * sizeof(char));
+  while (index < maxSize && fgets(buf, BUFFER_SIZE-1, file) != NULL) {
+    dropBufferFrom(buf, '\r');
+    dropBufferFrom(buf, '\n'); // Purgar fin de linea CRLF o LF
+    dropBufferFrom(buf, '#'); // Comentarios
+    LOGF("CSV: buf=%s\n", buf);
+    const char* token = strtok(buf, VALUE_SEPARATOR);
+    while (index < maxSize && token != NULL && *token != 0) {
+
+      // Recorremos todos los tokens/valores de la linea
+      if (ptr != 0) {
+        if (token != NULL) {
+          GMXdouble val = strtod(token, NULL);
+          ptr[index] = val;
+        }
+      }
+      token = strtok(NULL, VALUE_SEPARATOR_WITH_EOL);
+      // El indice lo aumentamos desde aqui para contar solo los tokens validos
+      index++;
+    }
+
+  }
+  return index;
+}
+
 void dropBufferFrom(char *buf,char dropCharacter)
 {
   char* position = strchr(buf, dropCharacter);

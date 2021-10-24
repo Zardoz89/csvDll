@@ -22,6 +22,8 @@ GMXint parseCsvFileUInt64(FILE* file, GMXuint64* ptr, GMXint maxSize);
 // GMXint parseCsvFileUInt(FILE* file, GMXuint* ptr, GMXint maxSize);
 // GMXint parseCsvFileLong(FILE* file, GMXlong* ptr, GMXint maxSize);
 // GMXint parseCsvFileULong(FILE* file, GMXulong* ptr, GMXint maxSize);
+GMXint parseCsvFileFloat(FILE* file, GMXfloat* ptr, GMXint maxSize);
+GMXint parseCsvFileDouble(FILE* file, GMXdouble* ptr, GMXint maxSize);
 
 #ifdef __cplusplus
 }

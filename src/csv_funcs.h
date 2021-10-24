@@ -49,6 +49,17 @@ GMXvoid GMXEXT_CSV_readToInt64Array();
  */
 GMXvoid GMXEXT_CSV_readToUInt64Array();
 
+
+/**
+ * Reads a CSV file and put's it on a FLOAT array
+ */
+GMXvoid GMXEXT_CSV_readToFloatArray();
+
+/**
+ * Reads a CSV file and put's it on a DOUBLE array
+ */
+GMXvoid GMXEXT_CSV_readToDoubleArray();
+
 #ifdef __cplusplus
 }
 #endif
