@@ -224,4 +224,70 @@ GMXvoid GMXEXT_CSV_readToUInt32Array() {
   GMXAPI_ReturnInt(numberOfElements);
 }
 
+GMXvoid GMXEXT_CSV_readToInt64Array() {
+  GMXint64* arrayPtr = GMXAPI_ParamGetInt64Ptr();
+  GMXint maxSizeBytes = getArrayMaxSizeInBytes();
+  GMXint maxSize = maxSizeBytes / sizeof(GMXint64);
+
+  GMXuint8* fileName = GMXAPI_ParamGetString();
+
+  LOG("CSV\n");
+  LOGF("CSV: fileName = %s\n", fileName);
+  LOG_SIZEOF();
+  LOG_MAX_SIZE();
+  LOGF("CSV: ptr = %p\n", arrayPtr);
+
+  char buf[BUFFER_SIZE];
+  memset(buf, 0, BUFFER_SIZE * sizeof(char));
+
+  GMXFile* gmxFile = GMXAPI_System_FileOpen(fileName, GMXAPI_OPEN_READ, GMXAPI_OPENMODE_TEXT, nullptr);
+
+  GMXint numberOfElements = 0;
+  if (gmxFile != NULL && gmxFile->f != NULL) {
+    LOG("CSV: file is opened.\n");
+    numberOfElements = parseCsvFileInt64(gmxFile->f, arrayPtr, maxSize);
+  } else {
+    LOG("CSV: file not found.\n");
+    numberOfElements = -1;
+  }
+
+  LOG_N_ELEMENTS();
+
+  GMXAPI_System_FileClose(gmxFile);
+  GMXAPI_ReturnInt(numberOfElements);
+}
+
+GMXvoid GMXEXT_CSV_readToUInt64Array() {
+  GMXuint64* arrayPtr = GMXAPI_ParamGetUInt64Ptr();
+  GMXint maxSizeBytes = getArrayMaxSizeInBytes();
+  GMXint maxSize = maxSizeBytes / sizeof(GMXuint64);
+
+  GMXuint8* fileName = GMXAPI_ParamGetString();
+
+  LOG("CSV\n");
+  LOGF("CSV: fileName = %s\n", fileName);
+  LOG_SIZEOF();
+  LOG_MAX_SIZE();
+  LOGF("CSV: ptr = %p\n", arrayPtr);
+
+  char buf[BUFFER_SIZE];
+  memset(buf, 0, BUFFER_SIZE * sizeof(char));
+
+  GMXFile* gmxFile = GMXAPI_System_FileOpen(fileName, GMXAPI_OPEN_READ, GMXAPI_OPENMODE_TEXT, nullptr);
+
+  GMXint numberOfElements = 0;
+  if (gmxFile != NULL && gmxFile->f != NULL) {
+    LOG("CSV: file is opened.\n");
+    numberOfElements = parseCsvFileUInt64(gmxFile->f, arrayPtr, maxSize);
+  } else {
+    LOG("CSV: file not found.\n");
+    numberOfElements = -1;
+  }
+
+  LOG_N_ELEMENTS();
+
+  GMXAPI_System_FileClose(gmxFile);
+  GMXAPI_ReturnInt(numberOfElements);
+}
+
 /* vim: set ts=2 sw=2 tw=0 et fileencoding=utf-8 :*/

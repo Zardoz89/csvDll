@@ -11,7 +11,7 @@
 #include "csv_funcs.h"
 #include "csv_parser.h"
 
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 512
 #define EOL "\r\n"
 
 

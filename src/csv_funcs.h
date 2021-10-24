@@ -39,6 +39,16 @@ GMXvoid GMXEXT_CSV_readToInt32Array();
  */
 GMXvoid GMXEXT_CSV_readToUInt32Array();
 
+/**
+ * Reads a CSV file and put's it on a INT64 array
+ */
+GMXvoid GMXEXT_CSV_readToInt64Array();
+
+/**
+ * Reads a CSV file and put's it on a UINT64 array
+ */
+GMXvoid GMXEXT_CSV_readToUInt64Array();
+
 #ifdef __cplusplus
 }
 #endif
