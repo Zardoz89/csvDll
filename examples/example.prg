@@ -7,6 +7,7 @@ private
   int16 data_i16[40];
   int32 data_i32[40];
   uint32 data_u32[40];
+  
   int tmp1;
   int tmp2;
   int tmp3;
@@ -210,16 +211,16 @@ end
  * Returns a pointer to the dynamic array
  */
  /*
-function loadAndAllocateData(dataFile)
+function loadAndAllocateData(string dataFile)
 private
   string _path;
   int _retVal = 0;
   int _nElements = 0;
   string _msg;
-  int pointer _data;
+  int32 *_data;
 begin
   _path = pathResolve(dataFile);
-  _nElements = csv_readtointarray(_path, 0, max_int);
+  _nElements = CSV_ReadToArray(_path, max_int);
   if (_nElements <= 0)
     _msg = "Error al abrir fichero de datos: " + _path;
     write(0, 0, 0, 0, _msg);
