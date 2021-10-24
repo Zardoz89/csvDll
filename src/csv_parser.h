@@ -12,7 +12,7 @@ extern "C" {
 
 GMXint parseCsvFileInt8(FILE* file, GMXint8* ptr, GMXint maxSize);
 GMXint parseCsvFileUInt8(FILE* file, GMXuint8* ptr, GMXint maxSize);
-// GMXint parseCsvFileInt16(FILE* file, GMXint16* ptr, GMXint maxSize);
+GMXint parseCsvFileInt16(FILE* file, GMXint16* ptr, GMXint maxSize);
 // GMXint parseCsvFileUInt16(FILE* file, GMXuint16* ptr, GMXint maxSize);
 GMXint parseCsvFileInt32(FILE* file, GMXint32* ptr, GMXint maxSize);
 GMXint parseCsvFileUInt32(FILE* file, GMXuint32* ptr, GMXint maxSize);
