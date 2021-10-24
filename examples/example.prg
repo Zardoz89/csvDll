@@ -12,6 +12,8 @@ private
   int tmp2;
   int tmp3;
   int tmp4;
+
+  int32* dyn;
 begin
   mode_set(1024, 768);
 
@@ -64,6 +66,9 @@ begin
     write(0, (x%20)*40, y + (x/20)*10, 0, offset data_u32[x]);
   end
   y += 20;
+
+  dyn = loadAndAllocateData("data.csv");
+  write(0, (x%20)*40, y + (x/20)*10, 0, offset dyn[1]);
 
   loop
     frame;
@@ -210,17 +215,16 @@ end
  * Reads a CSV file with data an allocated a dynamic array to store all the data
  * Returns a pointer to the dynamic array
  */
- /*
 function loadAndAllocateData(string dataFile)
 private
   string _path;
   int _retVal = 0;
   int _nElements = 0;
   string _msg;
-  int32 *_data;
+  int32 *_data = null;
 begin
   _path = pathResolve(dataFile);
-  _nElements = CSV_ReadToArray(_path, max_int);
+  _nElements = CSV_ReadToArray(_path, MAX_INT, _data);
   if (_nElements <= 0)
     _msg = "Error al abrir fichero de datos: " + _path;
     write(0, 0, 0, 0, _msg);
@@ -234,9 +238,10 @@ begin
       frame;
     end
   end
-  _data = malloc(_nElements);
-  csv_readtointarray(_path, _data, _nElements);
+  //return(_nElements);
+  _data = memory_new(_nElements * sizeof(int32));
+  CSV_ReadToArray(_path, _nElements * sizeof(int32), _data);
   return(_data);
 end
-*/
+
 /* vim: set ts=2 sw=2 tw=0 et fileencoding=iso8859-1 :*/
