@@ -1,20 +1,25 @@
 Modulo Gemix para lectura de ficheros CSV simples
-----------------------------------------
+-------------------------------------------------
 
 v0.4.0
 
-Versión portada/re.-escrita para Gemix v8
+Version ported/re-write for Gemix v8.0
 
-Esta DLL implementa funciones para parsear ficheros CSV, donde se utiliza el
-carácter ',' como elemento separador, y solo contienen valores numéricos. El
-carácter '#' marca que el resto de la linea se ignore, siendo útil para agregar
-comentarios y cabeceras en los ficheros.
+This module implements functions to read CSV files and fill Gemix arrays. The
+"," character it's used as a separator between values. And only numeric values
+are allowed. The character "#" it's uses as a begin comment indicator. So after
+a "#" everything on the same line will be ignored.
 
-Si un número comience con "0x" se interpretará en hexadecimal. Si comienca
-precedido de un 0, entonces se interpretará en base octal.
+If a number begins with "0x" or "0X", it will interpreted as hexadecimal. If it
+begins with "0", then will be interpreted as octal number (base 8). If a FLOAT
+or DOUBLE array it's being filled, then would accept exponential notation
+values and float/double values using a "." as decimal separator.
 
-Todos los buffers internos son de 256 bytes, con lo puede que no pueda procesar
-correctamente lineas mas largas de 255 bytes;
+The internal buffers are of 512 bytes, so lines longer that 512 bytes will be
+chomp to 512 bytes.
+
+The allowed data types are : INT8, UINT8, INT16, UINT16, INT32, UINT32, INT64,
+UINT64, FLOAT and DOUBLE. Mixed types on the same array aren't allowed.
 
 ## How build
 
@@ -23,42 +28,29 @@ gcc.
 
 ## Functions list
 
-`INT setCSVSeparator(STRING separator)`
 
-Sets the seperator token. The string it's used by C's strok function.
-
-
-`INT readCSVToIntArray(STRING fileName, OFFSET offset, INT numberOfElements)`
-
-Reads a CSV file on the path stored on the string *fileName*, and stores the
-values in an integer array or struct pointed by *offset*. The max number of elements
-read will be determinated by *numberOfElements*. The return value by the
-function, it's the number of elements read or -1 if there was an error.
-If *offset* is 0, then will not store any read element. It only will return the
-number of elements that are on the CSV file.
-
-`INT readCSVToWordArray(STRING fileName, OFFSET offset, INT numberOfElements)`
+`INT CSV_ReadToArray(STRING fileName, INT maxSize, INT8* pointer)`
+`INT CSV_ReadToArray(STRING fileName, INT maxSize, UINT8* pointer)`
+`INT CSV_ReadToArray(STRING fileName, INT maxSize, INT16* pointer)`
+`INT CSV_ReadToArray(STRING fileName, INT maxSize, UINT16* pointer)`
+`INT CSV_ReadToArray(STRING fileName, INT maxSize, INT32* pointer)`
+`INT CSV_ReadToArray(STRING fileName, INT maxSize, UINT32* pointer)`
+`INT CSV_ReadToArray(STRING fileName, INT maxSize, INT64* pointer)`
+`INT CSV_ReadToArray(STRING fileName, INT maxSize, UINT64* pointer)`
+`INT CSV_ReadToArray(STRING fileName, INT maxSize, FLOAT* pointer)`
+`INT CSV_ReadToArray(STRING fileName, INT maxSize, DOUBLE* pointer)`
 
 Reads a CSV file on the path stored on the string *fileName*, and stores the
-values in an word array pointed by *offset*. The max number of elements
-read will be determinated by *numberOfElements*. The return value by the
-function, it's the number of elements read or -1 if there was an error.
-If *offset* is 0, then will not store any read element. It only will return the
-number of elements that are on the CSV file.
+values in an integer array or struct pointed by *pointer*. The max number of 
+elements read will be determined by *maxSize* (`sizeof(array)`). The return
+value by the function, it's the number of elements read or -1 if there was an 
+error.
+If *pointer* is null or 0, then will not store any read element. It only will
+return the number of elements that are on the CSV file.
 
-`INT readCSVToByteArray(STRING fileName, OFFSET offset, INT numberOfElements)`
+## Examples
 
-Reads a CSV file on the path stored on the string *fileName*, and stores the
-values in an byte array pointed by *offset*. The max number of elements
-read will be determinated by *numberOfElements*. The return value by the
-function, it's the number of elements read or -1 if there was an error.
-If *offset* is 0, then will not store any read element. It only will return the
-number of elements that are on the CSV file.
-
-
-## Ejemplo de uso
-
-Uso típico:
+Typical use case:
 
 ```div2
 /**
@@ -70,16 +62,16 @@ begin
 end
 
 /**
- * Lee un fichero CSV con datos de juego
+ * Reads a CSV file and fills a int32 array
  */
-function loadData(dataFile, _offset, size)
+function int loadData(string dataFile, int _size, int32* _data)
 private
   string _path;
   int _retVal = 0;
   string _msg;
 begin
   _path = pathResolve(dataFile);
-  _retVal = readCSVToIntArray(_path, _offset, size);
+  _retVal = CSV_ReadToArray(_path, _size, _data);
   if (_retVal <= 0)
     _msg = "Error al abrir fichero de datos: " + _path;
     write(0, 0, 0, 0, _msg);
@@ -98,32 +90,37 @@ end
 
 ...
 
-loadData("dat\mydata.dat", offset myArray, sizeof(myArray));
+loadData("dat\mydata.dat", sizeof(myArray), &myArray);
 ```
 
-Determinar la cantidad de elementos en un fichero antes de cargar el contenido:
+Generating a dynamic array to load all data from CSV file:
 
 ```div2
+typedef
+  type DynArray
+    int length;
+    int32* data;
+  end
+end
+
 /**
- * Función que carga el contenido de un fichero CSV en un array dinamico
- (generado por malloc)
- * Devuelve un puntero al array dinamico
+ * Reads a CSV file with data and allocates a dynamic array to store all the data
+ * Returns a pointer to the dynamic array
  */
-function loadAndAllocateData(dataFile)
+function DynArray loadAndAllocateData(string dataFile)
 private
   string _path;
   int _retVal = 0;
-  int _nElements = 0;
   string _msg;
-  int pointer _data;
+  DynArray _data;
 begin
   _path = pathResolve(dataFile);
-  _nElements = readCSVToIntArray(_path, 0, max_int);
-  if (_nElements <= 0)
+  _data.length = CSV_ReadToArray(_path, MAX_INT, _data.data);
+  if (_data->length <= 0)
     _msg = "Error al abrir fichero de datos: " + _path;
     write(0, 0, 0, 0, _msg);
     loop
-      // abortamos ejecución
+      // abort execution
       if (key(_q) || key(_esc))
         let_me_alone();
         break;
@@ -132,8 +129,9 @@ begin
       frame;
     end
   end
-  _data = malloc(_nElements);
-  readCSVToIntArray(_path, _data, _nElements);
+
+  _data->data = memory_new(_data.length * sizeof(int32));
+  CSV_ReadToArray(_path, _data.length * sizeof(int32), _data.data);
   return(_data);
 end
 ```
