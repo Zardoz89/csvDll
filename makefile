@@ -6,7 +6,8 @@ CC = gcc
 CFLAGS ?= -fPIC -fpermissive #-funsigned-char -w -O1
 LDFLAGS ?= -shared
 INCLUDE = -Iinclude
-DEFS = -DCSV_DEBUG
+# Uncomment to enable debug mode of CSV module
+DEFS = #-DCSV_DEBUG
 
 C32  = -m32 -DGMX_BUILD_32BIT
 C64  = -m64 -DGMX_BUILD_64BIT
