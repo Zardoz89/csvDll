@@ -16,6 +16,7 @@ private
   int32 data_i32[40];
   float data_f[25];
 
+  int xx, yy;
   int tmp1;
   int tmp2;
   int tmp3;
@@ -23,17 +24,17 @@ private
 
   DynArray dyn;
 begin
-  mode_set(1024, 768);
+  mode_set(1024, 768, 32);
 
   // int8 bit array
   loadData("data.csv", &data_i8, sizeof(data_i8));
 
-  write(0, 0, y, 0, "int8 array");
+  write(0, 0, yy, 0, "int8 array");
   tmp1 = sizeof(data_i8) ;
-  write(0, 100, y, 0, offset tmp1);
-  y += 10;
-  for (x = 0; x < tmp1; x++)
-    write(0, (x%20)*40, y + (x/20)*10, 0, offset data_i8[x]);
+  write(0, 100, yy, 0, &tmp1);
+  yy += 10;
+  for (xx = 0; xx < tmp1; xx++)
+    write(0, (xx%20)*40, yy + (xx/20)*10, 0, &data_i8[xx]);
   end
   y += 20;
 
@@ -41,76 +42,67 @@ begin
   // uint16 bit array
   loadData("data.csv", &data_u16, sizeof(data_u16));
 
-  write(0, 0, y, 0, "uint16 array");
+  write(0, 0, yy, 0, "uint16 array");
   tmp2 = sizeof(data_u16) / 2;
-  write(0, 100, y, 0, offset tmp2);
-  y += 10;
-  for (x = 0; x < tmp2; x++)
-    write(0, (x%20)*40, y + (x/20)*10, 0, offset data_u16[x]);
+  write(0, 100, yy, 0, &tmp2);
+  yy += 10;
+  for (xx = 0; xx < tmp2; xx++)
+    write(0, (xx%20)*40, yy + (xx/20)*10, 0, &data_u16[xx]);
   end
-  y += 20;
+  yy += 20;
 
   // int32 bit array
   loadData("data.csv", &data_i32, sizeof(data_i32));
 
-  write(0, 0, y, 0, "int32 array");
+  write(0, 0, yy, 0, "int32 array");
   tmp3 = sizeof(data_i32) / sizeof(int32);
-  write(0, 100, y, 0, offset tmp3);
-  y += 10;
-  for (x = 0; x < tmp3; x++)
-    write(0, (x%20)*40, y + (x/20)*10, 0, offset data_i32[x]);
+  write(0, 100, yy, 0, &tmp3);
+  yy += 10;
+  for (xx = 0; xx < tmp3; xx++)
+    write(0, (xx%20)*40, yy + (xx/20)*10, 0, &data_i32[xx]);
   end
-  y += 20;
+  yy += 20;
 
   // float array
   loadData("dataf.csv", &data_f, sizeof(data_f));
 
-  write(0, 0, y, 0, "float array");
+  write(0, 0, yy, 0, "float array");
   tmp4 = sizeof(data_f) / sizeof(float);
-  write(0, 100, y, 0, offset tmp4);
-  y += 10;
-  for (x = 0; x < tmp4; x++)
-    write(0, (x%10)*70, y + (x/10)*10, 0, offset data_f[x]);
+  write(0, 100, yy, 0, &tmp4);
+  yy += 10;
+  for (xx = 0; xx < tmp4; xx++)
+    write(0, (xx%10)*70, yy + (xx/10)*10, 0, &data_f[xx]);
   end
-  y += 30;
+  yy += 30;
 
   // Dinamico de int32
   dyn = loadAndAllocateData("data2.csv");
-  write(0, 0, y, 0, "dynamic array from csv");
-  write(0, 200, y, 0, offset dyn.length);
-  y += 10;
-  for (x = 0; x < dyn.length; x++)
-    write(0, (x%20)*40, y + (x/20)*10, 0, offset dyn.data[x]);
+  write(0, 0, yy, 0, "dynamic array from csv");
+  write(0, 200, yy, 0, &dyn.length);
+  yy += 10;
+  for (xx = 0; xx < dyn.length; xx++)
+    write(0, (xx%20)*40, yy + (xx/20)*10, 0, &dyn.data[xx]);
   end
-  y += 20;
+  yy += 20;
 
   loop
     frame;
-    if (key(_q) || key(_esc))
+    if (keydown(_q) || keydown(_esc))
       let_me_alone();
       break;
     end
   end
 end
 
-/**
- * Generates the relative path to the data files
- */
-function pathResolve(file)
-begin
-  return (file);
-end
 
 /**
  * Reads a CSV file with data
  */
-function int loadData(string dataFile, int32*_ptr, int _size)
+function int loadData(string _path, int32*_ptr, int _size)
 private
-  string _path;
   int _retVal = 0;
   string _msg;
 begin
-  _path = pathResolve(dataFile);
   _retVal = CSV_ReadToArray(_path, _size, _ptr);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
@@ -129,13 +121,11 @@ begin
 end
 
 
-function int loadData(string dataFile, uint32*_ptr, int _size)
+function int loadData(string _path, uint32*_ptr, int _size)
 private
-  string _path;
   int _retVal = 0;
   string _msg;
 begin
-  _path = pathResolve(dataFile);
   _retVal = CSV_ReadToArray(_path, _size, _ptr);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
@@ -153,13 +143,11 @@ begin
   return(_retVal);
 end
 
-function int loadData(string dataFile, int16*_ptr, int _size)
+function int loadData(string _path, int16*_ptr, int _size)
 private
-  string _path;
   int _retVal = 0;
   string _msg;
 begin
-  _path = pathResolve(dataFile);
   _retVal = CSV_ReadToArray(_path, _size, _ptr);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
@@ -177,13 +165,11 @@ begin
   return(_retVal);
 end
 
-function int loadData(string dataFile, uint16*_ptr, int _size)
+function int loadData(string _path, uint16*_ptr, int _size)
 private
-  string _path;
   int _retVal = 0;
   string _msg;
 begin
-  _path = pathResolve(dataFile);
   _retVal = CSV_ReadToArray(_path, _size, _ptr);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
@@ -201,13 +187,11 @@ begin
   return(_retVal);
 end
 
-function int loadData(string dataFile, int8*_ptr, int _size)
+function int loadData(string _path, int8*_ptr, int _size)
 private
-  string _path;
   int _retVal = 0;
   string _msg;
 begin
-  _path = pathResolve(dataFile);
   _retVal = CSV_ReadToArray(_path, _size, _ptr);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
@@ -225,13 +209,11 @@ begin
   return(_retVal);
 end
 
-function int loadData(string dataFile, uint8*_ptr, int _size)
+function int loadData(string _path, uint8*_ptr, int _size)
 private
-  string _path;
   int _retVal = 0;
   string _msg;
 begin
-  _path = pathResolve(dataFile);
   _retVal = CSV_ReadToArray(_path, _size, _ptr);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
@@ -249,13 +231,11 @@ begin
   return(_retVal);
 end
 
-function int loadData(string dataFile, float*_ptr, int _size)
+function int loadData(string _path, float*_ptr, int _size)
 private
-  string _path;
   int _retVal = 0;
   string _msg;
 begin
-  _path = pathResolve(dataFile);
   _retVal = CSV_ReadToArray(_path, _size, _ptr);
   if (_retVal <= 0)
     _msg = "Error reading data file: " + _path;
@@ -278,14 +258,12 @@ end
  * Reads a CSV file with data an allocated a dynamic array to store all the data
  * Returns a pointer to the dynamic array
  */
-function DynArray loadAndAllocateData(string dataFile)
+function DynArray loadAndAllocateData(string _path)
 private
-  string _path;
   int _retVal = 0;
   string _msg;
   DynArray _data;
 begin
-  _path = pathResolve(dataFile);
   _data.length = CSV_ReadToArray(_path, MAX_INT, _data.data);
   if (_data->length <= 0)
     _msg = "Error al abrir fichero de datos: " + _path;
