@@ -36,7 +36,7 @@ begin
   for (xx = 0; xx < tmp1; xx++)
     write(0, (xx%20)*40, yy + (xx/20)*10, 0, &data_i8[xx]);
   end
-  y += 20;
+  yy += 20;
 
 
   // uint16 bit array
@@ -109,7 +109,7 @@ begin
     write(0, 0, 0, 0, _msg);
     loop
       // abort execution
-      if (key(_q) || key(_esc))
+      if (keydown(_q) || keydown(_esc))
         let_me_alone();
         break;
       end
@@ -132,7 +132,7 @@ begin
     write(0, 0, 0, 0, _msg);
     loop
       // abort execution
-      if (key(_q) || key(_esc))
+      if (keydown(_q) || keydown(_esc))
         let_me_alone();
         break;
       end
@@ -154,7 +154,7 @@ begin
     write(0, 0, 0, 0, _msg);
     loop
       // abort execution
-      if (key(_q) || key(_esc))
+      if (keydown(_q) || keydown(_esc))
         let_me_alone();
         break;
       end
@@ -176,7 +176,7 @@ begin
     write(0, 0, 0, 0, _msg);
     loop
       // abort execution
-      if (key(_q) || key(_esc))
+      if (keydown(_q) || keydown(_esc))
         let_me_alone();
         break;
       end
@@ -198,7 +198,7 @@ begin
     write(0, 0, 0, 0, _msg);
     loop
       // abort execution
-      if (key(_q) || key(_esc))
+      if (keydown(_q) || keydown(_esc))
         let_me_alone();
         break;
       end
@@ -220,7 +220,7 @@ begin
     write(0, 0, 0, 0, _msg);
     loop
       // abort execution
-      if (key(_q) || key(_esc))
+      if (keydown(_q) || keydown(_esc))
         let_me_alone();
         break;
       end
@@ -242,7 +242,7 @@ begin
     write(0, 0, 0, 0, _msg);
     loop
       // abort execution
-      if (key(_q) || key(_esc))
+      if (keydown(_q) || keydown(_esc))
         let_me_alone();
         break;
       end
@@ -270,7 +270,7 @@ begin
     write(0, 0, 0, 0, _msg);
     loop
       // abort execution
-      if (key(_q) || key(_esc))
+      if (keydown(_q) || keydown(_esc))
         let_me_alone();
         break;
       end
